@@ -3,16 +3,16 @@
 <div class="container-fluid">
 	<div class="row" ng-repeat = "event in events">
 		<div class="col-md-10 col-md-offset-1 event-thumbnail-row">
-			<div class = "col-md-3">
+			<div class = "col-md-3 event-thumbnail-col">
 				<img src = "{{event.image}}" class = "img-thumbnail" alt = "{{event.title}}"></img>
 			</div>	
-			<div class = "col-md-2 col-md-offset-2 ">
-				<span class = "event-title"> {{event.title}} </span>
-				<span class = "event-detail"> {{event.location}}</span> 
-				<span class = "event-detail">{{event.organizer}}</span>
+			<div class = "col-md-3 col-md-offset-1 col-sm-offset-1 event-thumbnail-col">
+				<span class = "event-title"> {{event.title}} </span> <br></br>
+				<span class = "event-detail"> {{event.location}}</span> <br></br>
+				<span class = "event-detail">{{event.organizer}}</span> 
 			</div>
-			<div class = "col-md-2 col-md-offset-2 ">
-				<img src = "group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> </br></br>
+			<div class = "col-md-2 col-md-offset-3  col-sm-offset-1  event-thumbnail-col">
+				<img src = "group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>
 			</div>
 		</div>
 	</div>
