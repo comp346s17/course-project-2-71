@@ -1,6 +1,20 @@
+
 .event-thumbnail-row{
 	margin-bottom: 20px;
 	border: 2px solid #afb3b6;
     border-radius: 3px;
 	padding: 10px
+
+.btn-default {
+	border: 0;
+	color:#ffffff;
+	text-align:center;
+	font-family: "Lucida Console";
+	font-size: 14;
+	font-weight: bold;
+}
+
+.dropdown-menu {
+	width: 200%;
+
 }

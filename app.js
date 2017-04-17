@@ -1,5 +1,6 @@
 var myApp = angular.module('myApp', []);
 
+
 myApp.component('eventThumbnails', {
 	templateUrl: 'eventThumbnail.template.html',
 	controller: function($scope) {
@@ -22,3 +23,4 @@ myApp.component('eventThumbnails', {
 		
 	}
 });
+
