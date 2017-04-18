@@ -30,3 +30,8 @@ myApp.component('eventThumbnails', {
 	}
 });
 
+
+myApp.controller('formCtrl', function($scope) {
+    $scope.firstname = "";
+    $scope.location = "";
+});
