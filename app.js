@@ -47,6 +47,15 @@ myApp.component('eventThumbnails', {
 });
 
 
+
+myApp.component('newEventForm', {
+	templateUrl: 'newEventForm.template.html',
+	controller: function($scope){
+		//nothing goes here yet
+	}
+})
+
+
 myApp.component('eventDetail', {
 	templateUrl: 'eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams) {
@@ -67,6 +76,9 @@ myApp.config(function($routeProvider) {
     }).
     when('/event/:eventId', {
       template: '<event-detail></event-detail>'
+    }).
+    when('/new-event', {
+    	template: '<new-event-form></new-event-form>'
     }).
     otherwise('/');
 });
