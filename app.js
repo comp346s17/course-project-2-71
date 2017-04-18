@@ -72,7 +72,14 @@ myApp.component('signUp', {
 	controller: function($scope){
 		//nothing here yet
 	}
-})
+});
+
+myApp.component('logIn', {
+	templateUrl: 'login.template.html',
+	controller: function($scope){
+		//nothing here yet
+	}
+});
 
 myApp.config(function($routeProvider) {
 	
@@ -86,8 +93,11 @@ myApp.config(function($routeProvider) {
     when('/new-event', {
     	template: '<new-event-form></new-event-form>'
     }).
-    when('/signup',{
+    when('/sign-up',{
     	template: '<sign-up></sign-up>'
+    }).
+    when('/log-in', {
+    	template: '<log-in></log-in>'
     }).
     otherwise('/');
 });
