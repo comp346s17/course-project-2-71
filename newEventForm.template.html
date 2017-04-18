@@ -6,29 +6,29 @@
 
 	<div class="form-group">
 	  <label for="eventname">Event name:</label>
-	  <input type="text" class="form-control" id="eventname" ng-model="name" placeholder="Event name"/> 
+	  <input type="text" class="form-control" id="eventname" ng-model="name" placeholder="Event name" required /> 
 	</div>
 	<div class="form-group">
 	  <label>Location: </label>
 	  <div class="row">
 	  		<div class="col-sm-3">
-	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber"/>
+	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber" required />
 	  		</div>
 	  	  	<div class="col-sm-7">
-	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname"/>
+	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname" required />
 	  	  	</div>
 			<div class="col-sm-2">
-				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip"/>
+				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip" required />
 			</div>
 	  </div>
 	</div>
 	<div class="form-group">
-		<label class="radio-inline"><input type="radio" name="optradio" ng-model="city"/>St. Paul</label>
-		<label class="radio-inline"><input type="radio" name="optradio" ng-model="city"/>Minneapolis</label>
+		<label class="radio-inline"><input type="radio" name="city" ng-model="city" required/>St. Paul</label>
+		<label class="radio-inline"><input type="radio" name="city" ng-model="city"/>Minneapolis</label>
 	</div>
 	<div class="form-group">
 	  <label for="comment">Event details: </label>
-	  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event"></textarea>
+	  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required></textarea>
 	</div>
 	<div class="form-group">
 	  <input type="file" name="pic" accept="image/*" ng-model="image" placeholder="No file chosen"/>

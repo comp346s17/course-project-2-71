@@ -1,22 +1,23 @@
 <div class="container-fluid">
-	<div class="col-md-3 col-md-offset-2">
+	<div class="col-sm-4 col-sm-offset-2">
 		<div class="page-header">
 		  <h1>Sign Up</h1>
 		</div>
 
 		<div class="form-group">
 		  <label for="urs">Username:</label>
-		  <input type="text" class="form-control" id="urs" ng-model="username" placeholder="Username"/> 
+		  <input type="text" class="form-control" id="urs" ng-model="username" placeholder="Username" required/>
+		  <span>name requires an "e": {{username.$valid}}</span> 
 		</div>
 
 		<div class="form-group">
 		  <label for="pwd">Password:</label>
-		  <input type="text" class="form-control" id="pwd" ng-model="password" placeholder="Password"/> 
+		  <input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" required/> 
 		</div>
 
 		<div class="form-group">
 		  <label for="pwd">Confirm password:</label>
-		  <input type="text" class="form-control" id="pwd" placeholder="Password"/> 
+		  <input type="password" class="form-control" id="pwd" placeholder="Password" required/> 
 		</div>
 
 		<button type="button" class="btn btn-default">Submit</button>
