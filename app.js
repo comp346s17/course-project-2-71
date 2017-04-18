@@ -46,6 +46,7 @@ myApp.component('eventThumbnails', {
 	}
 });
 
+
 myApp.component('eventDetail', {
 	templateUrl: 'eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams) {
@@ -69,3 +70,10 @@ myApp.config(function($routeProvider) {
     }).
     otherwise('/');
 });
+
+
+myApp.controller('formCtrl', function($scope) {
+    $scope.firstname = "";
+    $scope.location = "";
+});
+
