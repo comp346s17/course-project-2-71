@@ -34,11 +34,13 @@
 	    </div>
 
 	    <ul class="nav navbar-nav navbar-right collapse navbar-collapse" id="login-btns">
-	      <li><a href="#!/sign-up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-	      <li><a href="#!/log-in"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+	      <li><a href="#" data-target="#signupModal" data-toggle="modal"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+	      <li><a href="#" data-target="#loginModal" data-toggle="modal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 	    </ul>
+
+	    <sign-up></sign-up>
+	    <log-in></log-in>
 	    
-	  </div>
 	</nav>
 
 <div class="container-fluid">
@@ -53,11 +55,11 @@
     </div>
     <div class="col-sm-3">
     	<!-- Trigger modal w this button -->
-		  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="modal" data-target="#myModal" aria-haspopup="true" aria-expanded="true" style="background-color: #99cc00;">Advanced Search
+		  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="modal" data-target="#searchModal" aria-haspopup="true" aria-expanded="true" style="background-color: #99cc00;">Advanced Search
 		  </button>
 
 		  <!-- Modal -->
-		  <div id="myModal" class="modal fade" role="dialog">
+		  <div id="searchModal" class="modal fade" role="dialog">
 			  <div class="modal-dialog">
 
 			    <!-- Modal content-->

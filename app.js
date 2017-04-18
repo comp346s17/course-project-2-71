@@ -93,12 +93,6 @@ myApp.config(function($routeProvider) {
     when('/new-event', {
     	template: '<new-event-form></new-event-form>'
     }).
-    when('/sign-up',{
-    	template: '<sign-up></sign-up>'
-    }).
-    when('/log-in', {
-    	template: '<log-in></log-in>'
-    }).
     otherwise('/');
 });
 
