@@ -1,7 +1,10 @@
 
+hmtl{
+	font-family: "Lucida Console";
+}
 .event-thumbnail-row{
 	margin-top: 20px;
-	border: 2px solid #afb3b6;
+	border: 1px solid #afb3b6;
     border-radius: 3px;
 }
 .event-thumbnail-col {	
@@ -13,7 +16,6 @@
 	color:#ffffff;
 	background-color: #99cc00;
 	text-align:center;
-	font-family: "Lucida Console";
 	font-size: 14;
 	font-weight: bold;
 }
@@ -24,6 +26,12 @@
 }
 
 .event-title {
-	font-size: 110%;
+	font-size: 150%;
 	font-weight: bold;
+	
 }
+
+.event-detail-col{
+	padding-top: 30px;
+}
+

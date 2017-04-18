@@ -1,10 +1,9 @@
 var myApp = angular.module('myApp', []);
 
 
-myApp.component('eventThumbnails', {
-	templateUrl: 'eventThumbnail.template.html',
-	controller: function($scope) {
-		var events = [{
+myApp.service('eventsService', function() {
+    // move your list of posts here;
+	var events = [{
 			image: "eventImage.png",
 			title: "The greatest event ever",
 			location: "St. Paul",
@@ -17,8 +16,15 @@ myApp.component('eventThumbnails', {
 			organizer: "Marylou",
 			going: 92,
 		}];
+    return events;
+});
+
+myApp.component('eventThumbnails', {
+	templateUrl: 'eventThumbnail.template.html',
+	controller: function($scope, eventsService) {
 		
-		$scope.events = events;
+		
+		$scope.events = eventsService;
 		
 		
 	}
