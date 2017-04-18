@@ -31,7 +31,9 @@ myApp.component('eventThumbnails', {
 });
 
 
-myApp.controller('formCtrl', function($scope) {
-    $scope.firstname = "";
-    $scope.location = "";
-});
+myApp.component('newEventForm', {
+	templateUrl: 'newEventForm.template.html',
+	controller: function($scope){
+		//nothing goes here yet
+	}
+})
