@@ -1,5 +1,4 @@
 
-<!-- KEEP FOR TEMPLATE OF COMPONENT -->
 <div class="container-fluid">
 	<div class="page-header">
 	  <h1>Add New Event <small>Some small text</small></h1>
@@ -15,16 +14,17 @@
 	  		<div class="col-sm-3">
 	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber"/>
 	  		</div>
-	  	  	<div class="col-sm-9">
+	  	  	<div class="col-sm-7">
 	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname"/>
 	  	  	</div>
+			<div class="col-sm-2">
+				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip"/>
+			</div>
 	  </div>
 	</div>
 	<div class="form-group">
-		<div class="input-group">
-			<label class="checkbox-inline"><input type="checkbox" value="" ng-model="city"/>St. Paul</label>
-			<label class="checkbox-inline"><input type="checkbox" value="" ng-model="city"/>Minneapolis</label>
-		</div>
+		<label class="radio-inline"><input type="radio" name="optradio" ng-model="city"/>St. Paul</label>
+		<label class="radio-inline"><input type="radio" name="optradio" ng-model="city"/>Minneapolis</label>
 	</div>
 	<div class="form-group">
 	  <label for="comment">Event details: </label>
@@ -37,7 +37,6 @@
 
 		
 </div>
-<!-- END TEMPLATE -->
 
 
 

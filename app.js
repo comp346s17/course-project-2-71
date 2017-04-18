@@ -51,7 +51,7 @@ myApp.component('eventThumbnails', {
 myApp.component('newEventForm', {
 	templateUrl: 'newEventForm.template.html',
 	controller: function($scope){
-		//nothing goes here yet
+		//nothing goes here yet: access form content: $scope.name, etc
 	}
 })
 
@@ -67,6 +67,12 @@ myApp.component('eventDetail', {
 	}
 });
 
+myApp.component('signUp', {
+	templateUrl: 'signup.template.html',
+	controller: function($scope){
+		//nothing here yet
+	}
+})
 
 myApp.config(function($routeProvider) {
 	
@@ -83,9 +89,4 @@ myApp.config(function($routeProvider) {
     otherwise('/');
 });
 
-
-myApp.controller('formCtrl', function($scope) {
-    $scope.firstname = "";
-    $scope.location = "";
-});
 
