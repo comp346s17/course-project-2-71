@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-
 <div class="container-fluid">
-	<div class="row" ng-repeat = "event in events">
+	<div class="row">
 		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
 			<div class = "col-md-3 event-thumbnail-col">
 				<img src = "{{event.image}}" class = "img-rounded img-responsive" alt = "{{event.title}}"></img>
 			</div>	
 			<div class = "col-md-3 col-md-offset-1 col-sm-offset-1 event-thumbnail-col event-detail-col">
-				<span class = "event-title text-center"> <a href="#!/event/{{event.id}}" >{{event.title}} </a></span> <br></br>
+				<span class = "event-title text-center"> {{event.title}} </span> <br></br>
 				<span class = "event-detail text-center">Location: {{event.location}}</span> <br></br>
 				<span class = "event-detail text-center">Date: {{event.date}}, {{event.time}}</span><br></br>
 				<span class = "event-detail text-center">Organizer: {{event.organizer}}</span> 
@@ -18,4 +16,10 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
+			<p class = "text-center">Description: {{evet.description}}</p>
+		</div>
+	</div>
+	
 </div>
