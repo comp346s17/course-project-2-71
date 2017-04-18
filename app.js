@@ -77,6 +77,9 @@ myApp.config(function($routeProvider) {
     when('/event/:eventId', {
       template: '<event-detail></event-detail>'
     }).
+    when('/new-event', {
+    	template: '<new-event-form></new-event-form>'
+    }).
     otherwise('/');
 });
 
