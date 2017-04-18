@@ -18,7 +18,18 @@
 	</div>
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
-			<p class = "text-center">Description: {{evet.description}}</p>
+			<div class = "col-md-1 col-md-offset-2 event-thumbnail-col">
+				<p><b> Description: </b></p>
+			</div>
+			<div class = "col-md-6  event-thumbnail-col">
+				<p>{{event.description}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
+			Media:
+			<event-media></event-media>
 		</div>
 	</div>
 	

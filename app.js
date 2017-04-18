@@ -22,7 +22,7 @@ myApp.service('eventsService', function() {
 			going: 92,
 			date: "1/10",
 			time: "11:00am",
-			description: "This event will be less awesome"
+			description: "This event will be less awesome, but I want a really long descripition so I end up in my second line"
 		}];
 	return {
 		all: function() { return events; },
