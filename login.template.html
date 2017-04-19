@@ -10,18 +10,19 @@
 	      <div class="modal-body">		      
 			<div class="container-fluid">
 				<div class="col-sm-6">
-
+				<form id="register-form">
 					<div class="form-group">
-					  <label for="urs">Username:</label>
-					  <input type="text" class="form-control" id="urs" ng-model="username" placeholder="Username"/> 
+					  <label for="username">Username:</label>
+					  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required/> 
 					</div>
 
 					<div class="form-group">
-					  <label for="pwd">Password:</label>
-					  <input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password"/> 
+					  <label for="password">Password:</label>
+					  <input type="password" class="form-control" id="password" ng-model="password" placeholder="Password" required/> 
 					</div>
 
-					<button type="button" class="btn btn-default">Submit</button>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
 				</div>
 			</div>
 		</div>
