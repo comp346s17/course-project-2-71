@@ -13,10 +13,8 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Politika</title>
 </head>
+
 <body>
-
-	
-
 
 	<nav class="navbar navbar-default" style="margin-bottom: 0 ">
 	 <div class="container-fluid">
@@ -45,6 +43,7 @@
 
 <div class="container-fluid">
   <div class="row" style="background-color: #1a1a1a; padding: 20px ">
+
     <div class="col-lg-5 col-md-5 col-sm-6 col-md-offset-1">
     	<div class="input-group ">
 	      <span class="input-group-btn">
@@ -53,58 +52,13 @@
 	      <input type="text" class="form-control" placeholder="Search for...">
 	    </div><!-- /input-group -->
     </div>
+
     <div class="col-lg-2 col-md-2 col-sm-3 col-md-offset-1 ">
     	<!-- Trigger modal w this button -->
 		  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="modal" data-target="#searchModal" aria-haspopup="true" aria-expanded="true" style="background-color: #99cc00;">Advanced Search
 		  </button>
-
 		  <!-- Modal -->
-		  <div id="searchModal" class="modal fade" role="dialog">
-			  <div class="modal-dialog">
-
-			    <!-- Modal content-->
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title">Advanced Search</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<div class="row">
-			      		<div class="col-sm-6">
-			      			<div class="input-group">
-							    <div><input type="checkbox" aria-label="..."> Option 1</div>
-						        <div><input type="checkbox" aria-label="..."> Option 2</div>
-						        <div><input type="checkbox" aria-label="..."> Option 3</div>
-						        <div><input type="checkbox" aria-label="..."> Option 4</div>
-						    </div><!-- /input-group -->
-			      		</div> <!--col-sm-6-->
-			      		<div  class="col-sm-6">
-			      			<!-- Single button -->
-							<div class="btn-group">
-							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    Dropdown Menu <span class="caret"></span>
-							  </button>
-							  <ul class="dropdown-menu">
-							    <li><a href="#">Action</a></li>
-							    <li><a href="#">Another action</a></li>
-							    <li><a href="#">Something else here</a></li>
-							    <li role="separator" class="divider"></li>
-							    <li><a href="#">Separated link</a></li>
-							  </ul>
-							</div>
-			      		</div>
-			      	</div> <!--row-->
-			      	<div class="row">
-			      		
-			      	</div><!--row -->
-			      </div><!--modal body -->
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Search</button>
-			      </div>
-			    </div>
-
-			  </div>
-			</div>
+		  <adv-search></adv-search>
     </div>
 
     <div class="col-lg-3 col-md-3 col-sm-3">
@@ -112,7 +66,7 @@
     	<a class="btn btn-default" style="background-color: #e65c00" href="#!/new-event">Add New Event</a>
 	    </div>
 	</div>
-	</div>
+  </div>
 </div>
 
 
