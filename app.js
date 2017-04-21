@@ -136,7 +136,6 @@ myApp.service('userService', function(){
 
 	};
 });
->>>>>>> fbf1a93e858e57d9003af9148c33987835e987dc
 
 
 myApp.component('eventThumbnails', {
