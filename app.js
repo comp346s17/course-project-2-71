@@ -192,6 +192,13 @@ myApp.component('userProfile', {
 	}
 });
 
+myApp.component('advSearch', {
+	templateUrl: 'advsearch.template.html',
+	controller: function($scope){
+		//nothing here yet
+	}
+});
+
 myApp.config(function($routeProvider) {
 	
   $routeProvider.
