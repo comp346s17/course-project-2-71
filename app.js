@@ -90,6 +90,16 @@ myApp.service('commentService', function(){
 		disliked: 0,
 		
 		
+	},{
+		id:3,
+		userId: 2,
+		eventId:1,
+		commentTitle: "I agree!",
+		commentText: "I was very inspired by everyone I met! definitely greatest even ever!",
+		liked: 4,
+		disliked: 0,
+		
+		
 	}];
 	return {
 		all: function() { return comments; },

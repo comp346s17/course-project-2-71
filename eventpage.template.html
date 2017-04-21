@@ -63,7 +63,7 @@
 		
 		</div>
 	</div>
-	<div class="row" ng-repeat = "comment in comments">
+	<div class="row" >
 		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
 			<div class="row" > 
 				<div class = "col-md-2 col-md-offset-2 event-thumbnail-col">
@@ -73,13 +73,13 @@
 					<a class="btn btn-default" href="" role = "button">Add Comments</a>
 				</div>
 			</div>
-			<div class = "row ">
+			<div class = "row" ng-repeat = "comment in comments" >
 				<div class = "row in-comment-row">
 					<div class = "col-md-2 col-md-offset-2 event-thumbnail-col">
 						<img src = "{{users.get(comment.userId).profilepic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
 					</div>
 					<div class = "col-md-5 event-thumbnail-col user-comment">
-						<p><b>{{users.get(comment.userId).userName}}</b></p>
+						<p><b>{{users.get(comment.userId).userName}}:</b></p>
 						<p>{{comment.commentText}}</p>
 					</div>
 				</div>
