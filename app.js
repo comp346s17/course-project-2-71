@@ -65,8 +65,6 @@ myApp.service('eventsService', function() {
 	};
 });
 
-<<<<<<< HEAD
-=======
 myApp.service('commentService', function(){
 	var comments = [{
 		id:1,
