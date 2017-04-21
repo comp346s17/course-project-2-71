@@ -10,25 +10,24 @@
 	      <div class="modal-body">
 	      		<div class="container-fluid">
 					<div class="col-sm-6">
-					<form id="signup-form">
-						<div class="form-group">
-						  <label for="username">Username:</label>
-						  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required/>
-						  <!-- <span>name requires an "e": {{username.$valid}}</span>  -->
-						</div>
+						<form id="signup-form" method="get" action="">
+							<div class="form-group">
+							  <label for="username">Username:</label>
+							  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required minlength="3"/>
+							</div>
 
-						<div class="form-group">
-						  <label for="password">Password:</label>
-						  <input type="password" class="form-control" id="password" ng-model="password" placeholder="Password" required/> 
-						</div>
+							<div class="form-group">
+							  <label for="password">Password:</label>
+							  <input type="password" class="form-control" id="password" ng-model="password" placeholder="Password" required minlength="6" /> 
+							</div>
 
-						<div class="form-group">
-						  <label for="password2">Confirm password:</label>
-						  <input type="password" class="form-control" id="password2" placeholder="Password" required/> 
-						</div>
+							<div class="form-group">
+							  <label for="password2">Confirm password:</label>
+							  <input type="password" class="form-control" id="confirm_password" placeholder="Password" required minlength="6" equalTo="#password" /> 
+							</div>
 
-						<button type="submit" class="btn btn-default">Submit</button>
-					</form>
+							<button type="submit" class="btn btn-default">Submit</button>
+						</form>
 					</div>
 
 				</div>
@@ -37,4 +36,4 @@
 	</div>
 </div>
 
-
+<script type="text/javascript" src="validation.js"></script>

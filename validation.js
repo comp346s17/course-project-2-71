@@ -28,20 +28,22 @@ $.validator.addMethod('strongPassword', function(value, element) {
   }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
 
 
-$(function(){
-	$('#signup-form').validate({
-		console.log('call validate on singup form')
-		rules: {
-			username: {
-				minlength: 3
-			},
-			password: {
-				strongPassword: true
-			},
-			password2: {
-				equalTo: '#password'
-			},
-		}
-	});
+$('#signup-form').validate({
+	rules: {
+		username: {
+			minlength: 3,
+            require: true
+		},
+		password: {
+            minlength: 6
+		},
+		password2: {
+			equalTo: '#password'
+		},
+	},
+    messages: {
+        username: "Please enter your username"
+    }
+});
 
-})
+$('#newevent-form').validate();

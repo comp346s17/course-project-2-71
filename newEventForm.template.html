@@ -6,7 +6,7 @@
 <form id="newevent-form">
 	<div class="form-group">
 	  <label for="eventname">Event name:</label>
-	  <input type="text" class="form-control" id="eventname" name="eventname" ng-model="name" placeholder="Event name" required /> 
+	  <input type="text" class="form-control" id="eventname" name="eventname" ng-model="name" placeholder="Event name" required minlength="6" /> 
 	</div>
 	<div class="form-group">
 	  <label>Location: </label>
@@ -15,10 +15,10 @@
 	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber" required />
 	  		</div>
 	  	  	<div class="col-sm-7">
-	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname" required />
+	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname" required minlength="3" />
 	  	  	</div>
 			<div class="col-sm-2">
-				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip" required />
+				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip" required minlength="5" />
 			</div>
 	  </div>
 	</div>
@@ -28,7 +28,7 @@
 	</div>
 	<div class="form-group">
 	  <label for="comment">Event details: </label>
-	  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required></textarea>
+	  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required minlength="20"></textarea>
 	</div>
 	<div class="form-group">
 	  <input type="file" name="pic" accept="image/*" ng-model="image" placeholder="No file chosen"/>
@@ -37,6 +37,6 @@
 </form>
 		
 </div>
-
+<script type="text/javascript" src="validation.js"></script>
 
 
