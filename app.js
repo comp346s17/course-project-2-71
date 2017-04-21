@@ -1,6 +1,7 @@
 var myApp = angular.module('myApp', ['ngRoute']);
 
 
+
 myApp.service('eventsService', function() {
   
 	var events = [{
@@ -20,7 +21,23 @@ myApp.service('eventsService', function() {
 				},{
 				id: 2,
 				path: "eventMedia2.jpg",
-				description: "Cake!",				
+				description: "Cake!",	
+			
+				},{
+				id: 3,
+				path: "eventMedia2.jpg",
+				description: "Cake!",	
+			
+				},{
+				id: 4,
+				path: "img1.jpg",
+				description: "Cake!",	
+			
+				},{
+				id: 5,
+				path: "img2.jpg",
+				description: "Cake!",	
+			
 				}]
 		}, {
 			id: 2,
@@ -49,6 +66,69 @@ myApp.service('eventsService', function() {
 	};
 });
 
+myApp.service('commentService', function(){
+	var comments = [{
+		id:1,
+		userId: 1,
+		eventId:1,
+		commentTitle: "great people!",
+		commentText: "I met some many woke people!",
+		liked: 2,
+		disliked: 0,
+		
+		
+	},{
+		id:2,
+		userId: 2,
+		eventId:2,
+		commentTitle: "Excited!",
+		commentText: "I\'m looking forward to this",
+		liked: 2,
+		disliked: 0,
+		
+		
+	}];
+	return {
+		all: function() { return comments; },
+		get: function(eventId) {
+			return comments.filter(function(comment) {
+				return comment.eventId == eventId;
+			});
+		}
+
+	};
+});
+
+myApp.service('userService', function(){
+	var users = [{
+		id:1,
+		userName: "OurVeryFirstUser",
+		password: "123324",
+		eventsGoing: [1],
+		profilepic: "user-profile.png"
+		
+		
+	},{
+		id:2,
+		userName: "ImOnlySecond",
+		password: "123324",
+		eventsGoing: [2],
+		profilepic: "profile-pic2.jpg"
+		
+		
+	}];
+	return {
+		all: function() { return users; },
+		get: function(userId) {
+			return users.find(function(user) {
+				return user.id == userId;
+			});
+		}
+
+	};
+});
+
+
 myApp.component('eventThumbnails', {
 	templateUrl: 'eventThumbnail.template.html',
 	controller: function($scope, eventsService) {
@@ -72,10 +152,16 @@ myApp.component('newEventForm', {
 
 myApp.component('eventDetail', {
 	templateUrl: 'eventpage.template.html',
-	controller: function($scope, eventsService, $routeParams) {
+	controller: function($scope, eventsService, $routeParams, commentService, userService) {
 		
 		console.log('get here');
 		$scope.event = eventsService.get($routeParams.eventId);
+		
+		$scope.comments = commentService.get($routeParams.eventId);
+		
+		
+		$scope.users = userService;
+		
 		
 		
 	}

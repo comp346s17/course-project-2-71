@@ -43,9 +43,9 @@
 					<div class="jcarousel-wrapper">
 						<div media-jcarousel class="jcarousel">
 							<ul>
-							<a href="" data-target="#mediaModal" data-toggle="modal">
+								
 								<li ng-repeat = "imgSrc in event.mediaList"><img src="{{imgSrc.path}}" alt="{{imgSrc.path}}"></li>
-							</a>	
+								
 							</ul>
 							
 						</div>
@@ -58,29 +58,48 @@
 						<p class="jcarousel-pagination" media-Content-Pagination></p>
 					</div>
 				</div>
+				
 			</div>
 		
 		</div>
 	</div>
+	<div class="row" ng-repeat = "comment in comments">
+		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
+			<div class="row" > 
+				<div class = "col-md-2 col-md-offset-2 event-thumbnail-col">
+					<b> Comments:</b>
+				</div>
+				<div class = "col-md-2 col-md-offset-6 event-thumbnail-col">
+					<a class="btn btn-default" href="" role = "button">Add Comments</a>
+				</div>
+			</div>
+			<div class = "row ">
+				<div class = "row in-comment-row">
+					<div class = "col-md-2 col-md-offset-2 event-thumbnail-col">
+						<img src = "{{users.get(comment.userId).profilepic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
+					</div>
+					<div class = "col-md-5 event-thumbnail-col user-comment">
+						<p><b>{{users.get(comment.userId).userName}}</b></p>
+						<p>{{comment.commentText}}</p>
+					</div>
+				</div>
+				<div class = "row in-comment-row">
+					<div class = "col-md-2 col-md-offset-8 event-thumbnail-col">
+						<button type="button" class="btn  btn-sm">
+							<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{comment.liked}}
+						</button>
+						<button type="button" class="btn  btn-sm">
+							<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{comment.disliked}}
+						</button>
+					</div>
+				</div>
+				
+				
+			</div>
+			
+		</div>
+	</div>
 	
-
-	
-<div id="mediaModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
 </div>
+
+	
