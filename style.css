@@ -1,4 +1,3 @@
-
 hmtl{
 	font-family: "Lucida Console";
 }
@@ -33,5 +32,9 @@ hmtl{
 
 .event-detail-col{
 	padding-top: 30px;
+}
+
+.profile-info {
+	padding-top: 50px;
 }
 

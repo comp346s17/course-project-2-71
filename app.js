@@ -45,21 +45,15 @@ myApp.service('eventsService', function() {
 				return event.id == eventId;
 			});
 		},
-		// find: function(searchText, $filter) {
-		// 	return $filter('searchEvent')(events, searchText);
-		// }
-
 	};
 });
+
+
 
 myApp.component('eventThumbnails', {
 	templateUrl: 'eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
-		// if ($routeParams.searchText){
-		// 	$scope.events = eventsService.find($routeParams.searchText);
-		// } else{
 			$scope.events = eventsService.all();
-		// }
 	}
 });
 
@@ -76,7 +70,6 @@ myApp.component('newEventForm', {
 myApp.component('eventDetail', {
 	templateUrl: 'eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams) {
-		console.log('get here');
 		$scope.event = eventsService.get($routeParams.eventId);
 		
 		
@@ -97,19 +90,13 @@ myApp.component('logIn', {
 	}
 });
 
-myApp.component('advSearch', {
-	templateUrl: 'advsearch.template.html',
-	controller: function($scope){
-		
-	}
-});
 
-myApp.component('profile', {
+myApp.component('userProfile', {
 	templateUrl: 'profile.template.html',
 	controller: function($scope){
-		//return logged in user
+		$scope.image = "userImage.png"
 	}
-})
+});
 
 myApp.config(function($routeProvider) {
 	
@@ -120,14 +107,11 @@ myApp.config(function($routeProvider) {
     when('/event/:eventId', {
       template: '<event-detail></event-detail>'
     }).
+    when('/user-profile', {
+	template: '<user-profile></user-profile>'
+    }).
     when('/new-event', {
     	template: '<new-event-form></new-event-form>'
-    }).
-    when('/:searchText', {
-    	template: '<event-thumbnails></event-thumbnails>'
-    }).
-    when('/profile', {
-    	template: '<profile></profile>'
     }).
     otherwise('/');
 });

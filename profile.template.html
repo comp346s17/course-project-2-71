@@ -1,18 +1,35 @@
-<dir class="container-fluid">
-
-	<div class="col-sm-2 col-sm-offset-1">
-		<!-- button goes here -->
-	</div>
-
-	<div class="col-sm-8 col-sm-offset-3">
+<div class="container-fluid profile-info">
+<div class="row">
 		<!-- profile info goes here -->
-		<div class = "col-sm-2">
-			<img src = "{{user.image}}" class = "img-rounded img-responsive" alt = "{{user.username}}"></img>
+		<div class = "col-sm-3 col-sm-offset-1">
+			<img src = "{{image}}" class = "img-rounded img-responsive"></img>
 		</div>
-		<div class = "col-sm-5 col-sm-offset-1">
-			<h3 class="text-center">User Name</h3><br></br>
-			<h3>About</h3>
-			<p class="text-center" placholder="Something about me..."></p><br></br> 
+		<div class = "col-sm-7">
+			<div class="page-header">
+				<h1>Sarah Lee</h1>
+			</div>
+			<p><b>About</b></p>
+			<p>I'm a high school teacher interested in environmental issues.</p><br></br>
+
+			<ul class="nav nav-tabs">
+			  <li class="active"><a data-toggle="tab" href="#organize">Events I organize</a></li>
+			  <li><a data-toggle="tab" href="#going">Events I'm going to</a></li>
+			</ul>
+
+			<div class="tab-content">
+			  <div id="organize" class="tab-pane fade in active">
+			    <h3>Events I organize</h3>
+			    <ul>
+			    	<li><a href="#">The greatest event ever</a></li>
+			    </ul>
+			  </div>
+			  <div id="going" class="tab-pane fade">
+			    <h3>Events I'm going to</h3>
+			    <ul>
+			    	<li><a href="#">The greatest event ever</a></li>
+			    </ul>
+			  </div>
+			</div> 	
 		</div>
-	</div>
-</dir>
+</div>
+</div>
