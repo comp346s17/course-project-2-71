@@ -12,7 +12,16 @@ myApp.service('eventsService', function() {
 			going: 100,
 			date: "12/23",
 			time: "12:00pm",
-			description: "This event will be awesome"
+			description: "This event will be awesome",
+			mediaList: [{
+				id: 1,
+				path: "eventMedia1.jpg",
+				description: "Shiny trees",				
+				},{
+				id: 2,
+				path: "eventMedia2.jpg",
+				description: "Cake!",				
+				}]
 		}, {
 			id: 2,
 			image: "eventImage.png",
@@ -22,7 +31,12 @@ myApp.service('eventsService', function() {
 			going: 92,
 			date: "1/10",
 			time: "11:00am",
-			description: "This event will be less awesome, but I want a really long descripition so I end up in my second line"
+			description: "This event will be less awesome, but I want a really long descripition so I end up in my second line",
+			mediaList: [{
+				id: 3,
+				path: "eventMedia3.png",
+				description: "Scary dragon",				
+				}]
 		}];
 	return {
 		all: function() { return events; },
@@ -104,3 +118,69 @@ myApp.config(function($routeProvider) {
 });
 
 
+myApp.directive('mediaJcarousel', function(){
+	 return {
+        // Restrict it to be an attribute in this case
+        restrict: 'A',
+	
+        // responsible for registering DOM listeners as well as updating the DOM
+        link: function(scope, element, attrs) {
+			
+            $(element).on('jcarousel:reload jcarousel:create', function () {
+                var carousel = $(this),
+                    width = carousel.innerWidth();
+
+                if (width >= 600) {
+                    width = width / 3;
+                } else if (width >= 350) {
+                    width = width / 2;
+                }
+
+                carousel.jcarousel('items').css('width', Math.ceil(width) + 'px');
+            })
+            .jcarousel({
+                wrap: 'circular'
+            });
+        }
+    };
+});
+
+myApp.directive('mediaContentArrows', function(){
+	 return {
+        // Restrict it to be an attribute in this case
+        restrict: 'A',
+	
+        // responsible for registering DOM listeners as well as updating the DOM
+        link: function(scope, element, attrs) {
+			
+            $(element).jcarouselControl(scope.$eval(attrs.mediaContentArrows));
+        }
+    };
+});
+
+myApp.directive('mediaContentPagination', function(){
+	 return {
+        // Restrict it to be an attribute in this case
+        restrict: 'A',
+	
+        // responsible for registering DOM listeners as well as updating the DOM
+        link: function(scope, element, attrs) {
+			
+            $(element).on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .on('click', function(e) {
+                e.preventDefault();
+            })
+            .jcarouselPagination({
+                perPage: 1,
+                item: function(page) {
+                    return '<a href="#' + page + '">' + page + '</a>';
+                }
+            });
+        }
+    };
+});
