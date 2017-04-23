@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 from django.contrib.auth.models import User
 
 class OurUser(models.Model):
@@ -63,3 +64,5 @@ class Comment(models.Model):
 class junctionEventUser(models.Model):
 		userId = models.ForeignKey(OurUser)
 		eventId = models.ForeignKey(Event)
+=======
+
