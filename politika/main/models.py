@@ -27,6 +27,7 @@ class Event(models.Model):
 	organizer = models.ForeignKey(OurUser, related_name = 'organizerId')
 	going = models.PositiveIntegerField()
 	date = models.DateField()
+	title = models.CharField(max_length=100)
 	startTime = models.TimeField()
 	endTime = models.TimeField()
 	description = models.TextField()
@@ -36,7 +37,7 @@ class Event(models.Model):
 		return {
 		  'id': self.id,
 		  'image': self.image,
-		  'organizer': self.organizer,
+		  'organizer': self.organizer.to_json(),
 		  'going': self.going,
 		  'date': self.date,
 		  'startTime': self.startTime,

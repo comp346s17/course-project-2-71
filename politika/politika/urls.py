@@ -21,6 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^$', views.index),
 	url(r'^api/events/$', views.eventsApi),
-	url(r'^api/events/(?P<postId>[0-9]+)$', views.eventsApi),
-
+	url(r'^api/events/(?P<eventId>[0-9]+)$', views.eventsApi),
 ]
