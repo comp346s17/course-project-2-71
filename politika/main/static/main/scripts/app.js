@@ -6,7 +6,7 @@ myApp.service('eventsService', function() {
   
 	var events = [{
 			id:1,
-			image: "eventImage.png",
+			image: "/static/main/img/eventImage.png",
 			title: "The greatest event ever",
 			location: "St. Paul",
 			organizer: "Sarah Lee",
@@ -16,32 +16,32 @@ myApp.service('eventsService', function() {
 			description: "This event will be awesome",
 			mediaList: [{
 				id: 1,
-				path: "eventMedia1.jpg",
+				path: "/static/main/img/eventMedia1.jpg",
 				description: "Shiny trees",				
 				},{
 				id: 2,
-				path: "eventMedia2.jpg",
+				path: "/static/main/img/eventMedia2.jpg",
 				description: "Cake!",	
 			
 				},{
 				id: 3,
-				path: "eventMedia2.jpg",
+				path: "/static/main/img/eventMedia2.jpg",
 				description: "Cake!",	
 			
 				},{
 				id: 4,
-				path: "img1.jpg",
+				path: "/static/main/img/img1.jpg",
 				description: "Cake!",	
 			
 				},{
 				id: 5,
-				path: "img2.jpg",
+				path: "/static/main/img/img2.jpg",
 				description: "Cake!",	
 			
 				}]
 		}, {
 			id: 2,
-			image: "eventImage.png",
+			image: "/static/main/img/eventImage.png",
 			title: "2nd greatest event ever",
 			location: "Minneapolis",
 			organizer: "Marylou",
@@ -51,7 +51,7 @@ myApp.service('eventsService', function() {
 			description: "This event will be less awesome, but I want a really long descripition so I end up in my second line",
 			mediaList: [{
 				id: 3,
-				path: "eventMedia3.png",
+				path: "/static/main/img/eventMedia3.png",
 				description: "Scary dragon",				
 				}]
 		}];
@@ -114,7 +114,7 @@ myApp.service('userService', function(){
 		userName: "OurVeryFirstUser",
 		password: "123324",
 		eventsGoing: [1],
-		profilepic: "user-profile.png"
+		profilepic: "/static/main/img/user-profile.png"
 		
 		
 	},{
@@ -122,7 +122,7 @@ myApp.service('userService', function(){
 		userName: "ImOnlySecond",
 		password: "123324",
 		eventsGoing: [2],
-		profilepic: "profile-pic2.jpg"
+		profilepic: "/static/main/img/profile-pic2.jpg"
 		
 		
 	}];
@@ -139,7 +139,7 @@ myApp.service('userService', function(){
 
 
 myApp.component('eventThumbnails', {
-	templateUrl: 'eventThumbnail.template.html',
+	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
 			$scope.events = eventsService.all();
 	}
@@ -148,7 +148,7 @@ myApp.component('eventThumbnails', {
 
 
 myApp.component('newEventForm', {
-	templateUrl: 'newEventForm.template.html',
+	templateUrl: '/static/main/newEventForm.template.html',
 	controller: function($scope){
 		//nothing goes here yet: access form content: $scope.name, etc
 	}
@@ -156,7 +156,7 @@ myApp.component('newEventForm', {
 
 
 myApp.component('eventDetail', {
-	templateUrl: 'eventpage.template.html',
+	templateUrl: '/static/main/eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams, commentService, userService) {
 		$scope.event = eventsService.get($routeParams.eventId);
 		
@@ -171,14 +171,14 @@ myApp.component('eventDetail', {
 });
 
 myApp.component('signUp', {
-	templateUrl: 'signup.template.html',
+	templateUrl: '/static/main/signup.template.html',
 	controller: function($scope){
 		//nothing here yet
 	}
 });
 
 myApp.component('logIn', {
-	templateUrl: 'login.template.html',
+	templateUrl: '/static/main/login.template.html',
 	controller: function($scope){
 		//nothing here yet
 	}
@@ -186,14 +186,14 @@ myApp.component('logIn', {
 
 
 myApp.component('userProfile', {
-	templateUrl: 'profile.template.html',
+	templateUrl: '/static/main/profile.template.html',
 	controller: function($scope){
 		$scope.image = "userImage.png"
 	}
 });
 
 myApp.component('advSearch', {
-	templateUrl: 'advsearch.template.html',
+	templateUrl: '/static/main/advsearch.template.html',
 	controller: function($scope){
 		//nothing here yet
 	}
