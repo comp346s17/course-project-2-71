@@ -188,7 +188,7 @@ myApp.component('logIn', {
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
 	controller: function($scope){
-		$scope.image = "userImage.png"
+		$scope.image = "/static/main/img/userImage.png"
 	}
 });
 
