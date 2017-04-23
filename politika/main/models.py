@@ -63,5 +63,3 @@ class Comment(models.Model):
 class junctionEventUser(models.Model):
 		userId = models.ForeignKey(OurUser)
 		eventId = models.ForeignKey(Event)
-		
-		
