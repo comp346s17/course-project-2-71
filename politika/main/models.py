@@ -9,7 +9,7 @@ class OurUser(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=50)
-	profile_pic = models.TextField(blank=True, null=True)
+	profile_pic = models.TextField()
 	about = models.TextField()
 	def to_json(self):
 	

@@ -166,10 +166,13 @@ myApp.component('newEventForm', {
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				console.log(mystartTime)
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:1 }, function(resp) {
+				endTime:myendTime, location: mylocation, organizer:1, image: $scope.image }, function(resp) {
 				// executed on successful response
 			});
+			
+		
 		}
+		
 	}
 })
 
@@ -179,13 +182,16 @@ myApp.component('eventDetail', {
 	controller: function($scope, eventsService, $routeParams, commentService, userService) {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
-		
+			console.log($scope.event.media_list)
 		});
 		
 		$scope.comments = commentService.get($routeParams.eventId);
 		
 		
 		$scope.users = userService;
+		$scope.getImage = function(){
+		
+		}
 		
 		
 		
