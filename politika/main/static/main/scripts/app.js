@@ -154,13 +154,18 @@ myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
 	controller: function($scope, eventsService){
 		//nothing goes here yet: access form content: $scope.name, etc
-			$scope.submit = function(){
-				var location = "{street_number: " + $scope.streetnumber + ", street_name: " + $scope.streetname + ", city: " + $scope.city
+			$scope.submitEvent = function(){
+				var mydate = $('#date').val()
+				var mystartTime = $('#startTime').val()
+				var myendTime = $('#endTime').val()
+				var mylocation = "{street_number: " + $scope.streetnumber + ", street_name: " + $scope.streetname + ", city: " + $scope.city
 				+ ", zip_code: " + $scope.zip + "}";
-				eventsService.save({title: $scope.title,descripition: $scope.eventdetail}, function(resp) {
+				
+				eventsService.save({title: $scope.eventname,descripition: $scope.eventdetail, date: mydate, startTime: mystartTime, 
+				endTime:myendTime, location: mylocation, organizer:1 }, function(resp) {
 				// executed on successful response
 			});
-		};
+		}
 	}
 })
 
@@ -297,6 +302,27 @@ myApp.directive('mediaContentPagination', function(){
                     return '<a href="#' + page + '">' + page + '</a>';
                 }
             });
+        }
+    };
+});
+
+myApp.directive('datetimePicker', function(){
+	 return {
+        // Restrict it to be an attribute in this case
+        restrict: 'A',
+	
+        // responsible for registering DOM listeners as well as updating the DOM
+        link: function(scope, element, attrs) {
+			
+            $(element).datetimepicker(scope.$eval(attrs.datetimePicker));
+			if(attrs.id == 'date'){
+				scope.date == $(element).data('date')
+			}else if(attrs.id == 'startTime'){
+				scope.startTime == $(element).val()
+			}else{
+				scope.endTime == $(element).val()
+			}
+			
         }
     };
 });

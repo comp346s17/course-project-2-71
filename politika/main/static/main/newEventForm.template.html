@@ -24,14 +24,48 @@
 	</div>
 	<div class="row">
 		<div class="form-group col-sm-5">
-			<label class="radio-inline"><input type="radio" name="city" ng-model="city" required/>St. Paul</label>
-			<label class="radio-inline"><input type="radio" name="city" ng-model="city"/>Minneapolis</label>
+			<label class="radio-inline"><input type="radio" name="city" ng-model="city" value = "St. Paul" required />St. Paul</label>
+			<label class="radio-inline"><input type="radio" name="city" ng-model="city" value = "Minneapolis"/>Minneapolis</label>
 		</div>
 	</div>
 	<div class="row">
 		<div class="form-group col-sm-3" >
-			 
+				 
+		
+			<label for="date">Date:</label>
+			<div class='input-group date' datetime-picker = "{format: 'MM/DD/YYYY'}" >
+				<input type='text' class="form-control" name = "date" id='date' ng-model="date"/>
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar">
+					</span>
+				</span>
+			</div>
+		
+		
+   
+
+
 	  </div>
+	  <div class="form-group col-sm-3" >
+	  <label for="startTime">Start time:</label>
+		<div class='input-group date' datetime-picker = "{format: 'LT'}" >
+					
+                    <input type='text' class="form-control" name = "startTime" id='startTime' ng-model = "startTime"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+           </div>
+	  </div>	
+	  <div class="form-group col-sm-3" >
+	  <label for="endTime">End time:</label>
+		<div class='input-group date' datetime-picker = "{format: 'LT'}" >
+					
+                    <input type='text' class="form-control" name = "endTime" id='endTime' ng-model = "endTime"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+           </div>
+	  </div>	
 	</div> 
   
 
@@ -48,7 +82,7 @@
 	</div>
 	<div class="row">
 		<div class="form-group col-sm-2">
-		  <button type="submit" class="btn btn-default">Create event</button>
+		  <input type = "button" ng-click="submitEvent()" class="btn btn-default" value = 'Crease event'> 
 		</div>
 		
 	</div>
