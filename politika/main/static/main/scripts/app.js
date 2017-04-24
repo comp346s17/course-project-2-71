@@ -162,10 +162,13 @@ myApp.component('newEventForm', {
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				console.log(mystartTime)
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:1 }, function(resp) {
+				endTime:myendTime, location: mylocation, organizer:1, image: $scope.image }, function(resp) {
 				// executed on successful response
 			});
+			
+		
 		}
+		
 	}
 })
 

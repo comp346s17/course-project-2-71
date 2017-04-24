@@ -25,8 +25,8 @@ def eventsApi(request, eventId=None):
 			myorganizer = OurUser.objects.get(id=params.get('organizer'))
 			mygoing = 0
 			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
-			mystartTime = datetime.datetime.strptime(params.get('startTime'), '%H:%M')
-			myendTime = datetime.datetime.strptime(params.get('endTime'), '%H:%M')
+			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
+			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
 			mediaList = ""
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
