@@ -178,13 +178,16 @@ myApp.component('eventDetail', {
 	controller: function($scope, eventsService, $routeParams, commentService, userService) {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
-		
+			console.log($scope.event.media_list)
 		});
 		
 		$scope.comments = commentService.get($routeParams.eventId);
 		
 		
 		$scope.users = userService;
+		$scope.getImage = function(){
+		
+		}
 		
 		
 		

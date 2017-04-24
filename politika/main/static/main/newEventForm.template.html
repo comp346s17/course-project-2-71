@@ -34,7 +34,7 @@
 		
 			<label for="date">Date:</label>
 			<div class='input-group date' datetime-picker = "{format: 'MM/DD/YYYY'}" >
-				<input type='text' class="form-control" name = "date" id='date' ng-model="date"/>
+				<input type='text' class="form-control" name = "date" id='date' ng-model="date" required/>
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-calendar">
 					</span>
@@ -50,7 +50,7 @@
 	  <label for="startTime">Start time:</label>
 		<div class='input-group date' datetime-picker = "{format: 'LT'}" >
 					
-                    <input type='text' class="form-control" name = "startTime" id='startTime' ng-model = "startTime"/>
+                    <input type='text' class="form-control" name = "startTime" id='startTime' ng-model = "startTime" required/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -60,7 +60,7 @@
 	  <label for="endTime">End time:</label>
 		<div class='input-group date' datetime-picker = "{format: 'LT'}" >
 					
-                    <input type='text' class="form-control" name = "endTime" id='endTime' ng-model = "endTime"/>
+                    <input type='text' class="form-control" name = "endTime" id='endTime' ng-model = "endTime" required/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -114,7 +114,7 @@
 						
 						</div>
 						<div class = "col-sm-6">
-							<input type = "button" class="btn btn-default" ng-click= "getImage()"  name = "useImage" value = 'Use image' data-dismiss="modal">
+							<input type = "button" class="btn btn-default"   name = "useImage" value = 'Use image' data-dismiss="modal">
 						</div>	
 					</div>	
 				</div>	

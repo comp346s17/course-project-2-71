@@ -34,7 +34,7 @@
 						<b> Media:</b>
 					</div>
 					<div class = "col-md-2 col-md-offset-6 event-thumbnail-col">
-						<a class="btn btn-default" href="" role = "button">Add Image</a>
+						<a href="" data-target="#addImageModal" data-toggle="modal" class="btn btn-default">Add image</a>
 					</div>
 				</div>	
 				<div class = "col-md-9 col-md-offset-2 event-thumbnail-col">					
@@ -44,7 +44,7 @@
 						<div media-jcarousel class="jcarousel">
 							<ul>
 								
-								<li ng-repeat = "imgSrc in event.mediaList"><img src="{{imgSrc.path}}" alt="{{imgSrc.path}}"></li>
+								<li ng-repeat = "imgSrc in event.media_list"><img src="{{imgSrc}}" alt="eventMedia"></li>
 								
 							</ul>
 							
@@ -100,6 +100,38 @@
 		</div>
 	</div>
 	
+</div>
+<div id="addImageModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content container-fluid">
+	      
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h1>Choose image</h1>
+	      </div>
+	      
+	      <div class="modal-body">		      
+			<div class="container-fluid">
+					
+				<div class="form-group">
+					
+					<label for="image">Copy here image URL:</label>
+					<div class = "row">
+						<div class="col-sm-6">
+							<input type="text" class="form-control" id="image" ng-model = 'image' name="image" placeholder="Image URL"/>
+						
+						</div>
+						<div class = "col-sm-6">
+							<input type = "button" class="btn btn-default" ng-click= "getImage()"  name = "useImage" value = 'Use image' data-dismiss="modal">
+						</div>	
+					</div>	
+				</div>	
+				<div ng-if="image">
+					<img src = "{{image}}" class = "img-rounded img-responsive" alt = "Invalid URL"></img>
+				</div>
+		</div>
+	</div>
+	</div>
 </div>
 
 	

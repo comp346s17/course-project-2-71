@@ -16,7 +16,6 @@ def eventsApi(request, eventId=None):
 			
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
-			pass
 			params = json.loads(request.body)
 			
 			myimage = params.get('image', "/static/main/img/eventImage.png")
@@ -28,7 +27,7 @@ def eventsApi(request, eventId=None):
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
-			mediaList = ""
+	
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription)
 			event.save()
@@ -38,7 +37,33 @@ def eventsApi(request, eventId=None):
 			event = Event.objects.get(id = eventId)
 			return JsonResponse(event.to_json())
 		elif(request.method == 'DELETE'):
-			pass
 			event = Event.objects.get(id=eventId)
 			event.delete()
 			return redirect("/")
+		elif(request.method == 'POST'):
+			params = json.loads(request.body)
+			event = Event.objects.get(id=eventId)
+			event.image = params.get('image', event.image)
+			event.title = params.get('title', event.title)
+			event.location = params.get('location', event.location)
+			event.going = params.get('going', event.going)
+			
+			tempDate = params.get('date', '')
+			if tempDate != '':
+				event.date =  datetime.datetime.strptime(str(tempDate), '%m/%d/%Y').strftime('%Y-%m-%d')
+			
+			tempStartTime = params.get('startTime', '')
+			if tempStartTime !='':
+				event.startTime = datetime.datetime.strptime(str(tempStartTime), "%I:%M %p").strftime('%H:%M:%S')
+			
+			tempEndTime = params.get('endTime', '')
+			if tempEndTime != '':
+				event.endTime = datetime.datetime.strptime(str(tempEndTime), "%I:%M %p").strftime('%H:%M:%S')
+			
+			event.description = params.get('description',event.description)
+			
+			
+			event.media_list = event.media_list + params.get('media_list')
+			event.save()
+			return redirect("/")
+			
