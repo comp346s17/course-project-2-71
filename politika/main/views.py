@@ -29,8 +29,8 @@ def eventsApi(request, eventId=None):
 			myendTime = params.get('startTime', datetime.datetime.now())
 			mydescription = params.get('description',"This event will be awesome")
 			mediaList = ""
-			event = Event(title=mytitle, organizer=myorganizer, image = myimage,
-			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime)
+			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
+			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription)
 			event.save()
 			return redirect("/")
 	else:

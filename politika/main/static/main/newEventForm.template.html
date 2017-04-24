@@ -22,18 +22,36 @@
 			</div>
 	  </div>
 	</div>
-	<div class="form-group">
-		<label class="radio-inline"><input type="radio" name="city" ng-model="city" required/>St. Paul</label>
-		<label class="radio-inline"><input type="radio" name="city" ng-model="city"/>Minneapolis</label>
+	<div class="row">
+		<div class="form-group col-sm-5">
+			<label class="radio-inline"><input type="radio" name="city" ng-model="city" required/>St. Paul</label>
+			<label class="radio-inline"><input type="radio" name="city" ng-model="city"/>Minneapolis</label>
+		</div>
 	</div>
-	<div class="form-group">
-	  <label for="comment">Event details: </label>
-	  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required minlength="20"></textarea>
+	<div class="row">
+		<div class="form-group col-sm-3" >
+			 
+	  </div>
+	</div> 
+  
+
+	<div class="row">
+		<div class="form-group col-sm-12">
+		  <label for="eventdetail">Event details: </label>
+		  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required minlength="20"></textarea>
+		</div>
 	</div>
-	<div class="form-group">
-	  <input type="file" name="pic" accept="image/*" ng-model="image" placeholder="No file chosen"/>
+	<div class="row">
+		<div class="form-group col-sm-2">
+		  <input type="file" name="pic" accept="image/*" ng-model="image" placeholder="No file chosen"/>
+		</div>
 	</div>
-    <button type="submit" class="btn btn-default">Create</button>
+	<div class="row">
+		<div class="form-group col-sm-2">
+		  <button type="submit" class="btn btn-default">Create event</button>
+		</div>
+		
+	</div>
 </form>
 		
 </div>

@@ -1,10 +1,10 @@
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
 
 
 
-myApp.service('eventsService', function() {
-  
-	var events = [{
+myApp.service('eventsService', function($resource) {
+	return $resource('/api/events/:id', {});
+	/* var events = [{
 			id:1,
 			image: "/static/main/img/eventImage.png",
 			title: "The greatest event ever",
@@ -62,7 +62,7 @@ myApp.service('eventsService', function() {
 				return event.id == eventId;
 			});
 		},
-	};
+	}; */
 });
 
 myApp.service('commentService', function(){
@@ -141,7 +141,10 @@ myApp.service('userService', function(){
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
-			$scope.events = eventsService.all();
+		eventsService.query(function(resp){
+			
+			$scope.events = resp;
+		});
 	}
 });
 
@@ -149,8 +152,15 @@ myApp.component('eventThumbnails', {
 
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
-	controller: function($scope){
+	controller: function($scope, eventsService){
 		//nothing goes here yet: access form content: $scope.name, etc
+			$scope.submit = function(){
+				var location = "{street_number: " + $scope.streetnumber + ", street_name: " + $scope.streetname + ", city: " + $scope.city
+				+ ", zip_code: " + $scope.zip + "}";
+				eventsService.save({title: $scope.title,descripition: $scope.eventdetail}, function(resp) {
+				// executed on successful response
+			});
+		};
 	}
 })
 
@@ -158,7 +168,10 @@ myApp.component('newEventForm', {
 myApp.component('eventDetail', {
 	templateUrl: '/static/main/eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams, commentService, userService) {
-		$scope.event = eventsService.get($routeParams.eventId);
+		eventsService.get({id: $routeParams.eventId}, function(resp){
+			$scope.event = resp;
+		
+		});
 		
 		$scope.comments = commentService.get($routeParams.eventId);
 		
@@ -199,23 +212,26 @@ myApp.component('advSearch', {
 	}
 });
 
-myApp.config(function($routeProvider) {
-	
-  $routeProvider.
-    when('/', {
-      template: '<event-thumbnails></event-thumbnails>'
-    }).
-    when('/event/:eventId', {
-      template: '<event-detail></event-detail>'
-    }).
-    when('/user-profile', {
-	template: '<user-profile></user-profile>'
-    }).
-    when('/new-event', {
-    	template: '<new-event-form></new-event-form>'
-    }).
-    otherwise('/');
-});
+myApp.config(function($routeProvider, $httpProvider, $resourceProvider ) {
+	$httpProvider.defaults.xsrfCookieName = 'csrftoken';
+	$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+	$resourceProvider.defaults.stripTrailingSlashes = false;
+
+	$routeProvider.
+	   when('/', {
+			template: '<event-thumbnails></event-thumbnails>'
+	   }).
+	   when('/event/:eventId', {
+			template: '<event-detail></event-detail>'
+	   }).
+	   when('/user-profile', {
+			template: '<user-profile></user-profile>'
+	   }).
+	   when('/new-event', {
+			template: '<new-event-form></new-event-form>'
+	   }).
+		otherwise('/');
+	});
 
 
 myApp.directive('mediaJcarousel', function(){
@@ -284,3 +300,5 @@ myApp.directive('mediaContentPagination', function(){
         }
     };
 });
+
+

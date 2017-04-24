@@ -37,6 +37,8 @@ class Event(models.Model):
 		return {
 		  'id': self.id,
 		  'image': self.image,
+		  'location': self.location,
+		  'title': self.title,
 		  'organizer': self.organizer.to_json(),
 		  'going': self.going,
 		  'date': self.date,
