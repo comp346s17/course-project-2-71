@@ -158,10 +158,10 @@ myApp.component('newEventForm', {
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
 				var myendTime = $('#endTime').val()
-				var mylocation = "{street_number: " + $scope.streetnumber + ", street_name: " + $scope.streetname + ", city: " + $scope.city
-				+ ", zip_code: " + $scope.zip + "}";
-				
-				eventsService.save({title: $scope.eventname,descripition: $scope.eventdetail, date: mydate, startTime: mystartTime, 
+				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
+				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+				console.log(mystartTime)
+				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
 				endTime:myendTime, location: mylocation, organizer:1 }, function(resp) {
 				// executed on successful response
 			});

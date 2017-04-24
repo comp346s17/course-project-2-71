@@ -13,7 +13,7 @@ def eventsApi(request, eventId=None):
 		if(request.method == 'GET'):
 			events = Event.objects.all()
 			allEvents = [e.to_json() for e in events] # shorthand for loop
-			print(allEvents)
+			
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
 			pass
@@ -24,9 +24,9 @@ def eventsApi(request, eventId=None):
 			mylocation = params.get('location', "St. Paul")
 			myorganizer = OurUser.objects.get(id=params.get('organizer'))
 			mygoing = 0
-			mydate = params.get('date', datetime.datetime.now())
-			mystartTime = params.get('startTime', datetime.datetime.now())
-			myendTime = params.get('startTime', datetime.datetime.now())
+			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+			mystartTime = datetime.datetime.strptime(params.get('startTime'), '%H:%M')
+			myendTime = datetime.datetime.strptime(params.get('endTime'), '%H:%M')
 			mydescription = params.get('description',"This event will be awesome")
 			mediaList = ""
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 

@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
-
+import json
+import datetime
 from django.contrib.auth.models import User
 
 class OurUser(models.Model):
@@ -12,6 +12,7 @@ class OurUser(models.Model):
 	profile_pic = models.TextField()
 	about = models.TextField()
 	def to_json(self):
+	
 		return {
 		  'id': self.id,
 		  'name': self.name,
@@ -37,13 +38,13 @@ class Event(models.Model):
 		return {
 		  'id': self.id,
 		  'image': self.image,
-		  'location': self.location,
+		  'location': json.loads(self.location),
 		  'title': self.title,
 		  'organizer': self.organizer.to_json(),
 		  'going': self.going,
-		  'date': self.date,
-		  'startTime': self.startTime,
-		  'endTime': self.endTime,
+		  'date': datetime.datetime.strptime(str(self.date), "%Y-%m-%d").strftime('%m-%d-%Y'),
+		  'startTime': datetime.datetime.strptime(str(self.startTime), "%H:%M:%S").strftime('%I:%M %p'),
+		  'endTime': datetime.datetime.strptime(str(self.endTime), "%H:%M:%S").strftime('%I:%M %p'),
 		  'description': self.description,
 		  'media_list': self.media_list
 		}

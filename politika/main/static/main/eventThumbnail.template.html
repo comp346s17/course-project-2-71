@@ -6,14 +6,14 @@
 			<div class = "col-md-3 event-thumbnail-col">
 				<img src = "{{event.image}}" class = "img-rounded img-responsive" alt = "{{event.title}}"></img>
 			</div>	
-			<div class = "col-md-3 col-md-offset-1 col-sm-offset-1 event-thumbnail-col event-detail-col">
+			<div class = "col-md-4 col-md-offset-1 col-sm-offset-1 event-thumbnail-col event-detail-col">
 				
 				<span class = "event-title text-center"> <a href="#!/event/{{event.id}}" >{{event.title}}</a></span> <br></br>
-				<span class = "event-detail text-center">Location: {{event.location}}</span> <br></br>
-				<span class = "event-detail text-center">Date: {{event.date}}, {{event.time}}</span><br></br>
+				<span class = "event-detail text-center">Location: {{event.location.city}}</span> <br></br>
+				<span class = "event-detail text-center">Date: {{event.date}}, {{event.startTime}} - {{event.endTime}}</span><br></br>
 				<span class = "event-detail text-center">Organizer: {{event.organizer.name}} {{event.organizer.last_name}}</span> 
 			</div>
-			<div class = "col-md-2 col-md-offset-3  col-sm-offset-1  event-thumbnail-col event-detail-col">
+			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
 				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>
 				<button type="button" class="btn btn-default" name = "going">I'm Going!</button>
 			</div>
