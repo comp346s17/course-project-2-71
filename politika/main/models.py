@@ -46,7 +46,7 @@ class Event(models.Model):
 		  'startTime': datetime.datetime.strptime(str(self.startTime), "%H:%M:%S").strftime('%I:%M %p'),
 		  'endTime': datetime.datetime.strptime(str(self.endTime), "%H:%M:%S").strftime('%I:%M %p'),
 		  'description': self.description,
-		  'media_list': self.media_list
+		  'media_list': json.loads(self.media_list)
 		}
 
 class Comment(models.Model):

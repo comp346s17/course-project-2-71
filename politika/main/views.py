@@ -17,7 +17,7 @@ def eventsApi(request, eventId=None):
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
 			params = json.loads(request.body)
-			
+			print('get id? ' + str(eventId))
 			myimage = params.get('image', "/static/main/img/eventImage.png")
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
@@ -27,9 +27,9 @@ def eventsApi(request, eventId=None):
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
-	
+			myMediaList = "[]"
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
-			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription)
+			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
 			event.save()
 			return redirect("/")
 	else:
@@ -40,14 +40,14 @@ def eventsApi(request, eventId=None):
 			event = Event.objects.get(id=eventId)
 			event.delete()
 			return redirect("/")
-		elif(request.method == 'POST'):
+		elif(request.method == 'PUT'):
 			params = json.loads(request.body)
 			event = Event.objects.get(id=eventId)
 			event.image = params.get('image', event.image)
 			event.title = params.get('title', event.title)
 			event.location = params.get('location', event.location)
 			event.going = params.get('going', event.going)
-			
+			print('gete here spost wiht id')
 			tempDate = params.get('date', '')
 			if tempDate != '':
 				event.date =  datetime.datetime.strptime(str(tempDate), '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -63,7 +63,14 @@ def eventsApi(request, eventId=None):
 			event.description = params.get('description',event.description)
 			
 			
-			event.media_list = event.media_list + params.get('media_list')
+			tempMediaList = params.get('media_list', '')
+			if tempMediaList != '':
+				
+				currentMediaList = json.loads(event.media_list)
+				tempMediaList = json.loads(tempMediaList)
+				currentMediaList.append(tempMediaList)
+				event.media_list = json.dumps(currentMediaList)
+				
 			event.save()
 			return redirect("/")
 			

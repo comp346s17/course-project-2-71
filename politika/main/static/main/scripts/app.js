@@ -3,66 +3,10 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
 
 
 myApp.service('eventsService', function($resource) {
-	return $resource('/api/events/:id', {});
-	/* var events = [{
-			id:1,
-			image: "/static/main/img/eventImage.png",
-			title: "The greatest event ever",
-			location: "St. Paul",
-			organizer: "Sarah Lee",
-			going: 100,
-			date: "12/23",
-			time: "12:00pm",
-			description: "This event will be awesome",
-			mediaList: [{
-				id: 1,
-				path: "/static/main/img/eventMedia1.jpg",
-				description: "Shiny trees",				
-				},{
-				id: 2,
-				path: "/static/main/img/eventMedia2.jpg",
-				description: "Cake!",	
-			
-				},{
-				id: 3,
-				path: "/static/main/img/eventMedia2.jpg",
-				description: "Cake!",	
-			
-				},{
-				id: 4,
-				path: "/static/main/img/img1.jpg",
-				description: "Cake!",	
-			
-				},{
-				id: 5,
-				path: "/static/main/img/img2.jpg",
-				description: "Cake!",	
-			
-				}]
-		}, {
-			id: 2,
-			image: "/static/main/img/eventImage.png",
-			title: "2nd greatest event ever",
-			location: "Minneapolis",
-			organizer: "Marylou",
-			going: 92,
-			date: "1/10",
-			time: "11:00am",
-			description: "This event will be less awesome, but I want a really long descripition so I end up in my second line",
-			mediaList: [{
-				id: 3,
-				path: "/static/main/img/eventMedia3.png",
-				description: "Scary dragon",				
-				}]
-		}];
-	return {
-		all: function() { return events; },
-		get: function(eventId) {
-			return events.find(function(event) {
-				return event.id == eventId;
-			});
-		},
-	}; */
+	return $resource('/api/events/:id',{}, {
+		'update': { method:'PUT' }
+	});
+	
 });
 
 myApp.service('commentService', function(){
@@ -178,7 +122,6 @@ myApp.component('eventDetail', {
 	controller: function($scope, eventsService, $routeParams, commentService, userService) {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
-			console.log($scope.event.media_list)
 		});
 		
 		$scope.comments = commentService.get($routeParams.eventId);
@@ -186,8 +129,14 @@ myApp.component('eventDetail', {
 		
 		$scope.users = userService;
 		$scope.getImage = function(){
-		
+			console.log($scope.event.id)
+			var newMedia = "{ \"path\": \"" + $scope.image + "\"}"
+			var newMediaDic = { "path": $scope.image}
+			eventsService.update({id: $routeParams.eventId}, {"media_list": newMedia});
+			$scope.event.media_list.push(newMediaDic)
 		}
+		
+		
 		
 		
 		
