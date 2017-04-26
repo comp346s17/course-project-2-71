@@ -8,7 +8,7 @@
 				<span class = "event-title text-center"> {{event.title}} </span> <br></br>
 				<span class = "event-detail text-center">Location: {{event.location.city}}</span> <br></br>
 				<span class = "event-detail text-center">Date: {{event.date}} {{event.startTime}} - {{event.endTime}}</span><br></br>
-				<span class = "event-detail text-center">Organizer: {{event.organizer.name}} {{event.organizer.last_name}}</span> 
+				<span class = "event-detail text-center">Organizer: <a href = '/api/users/{{event.organizer.id}}'>{{event.organizer.name}} {{event.organizer.last_name}}</a></span> 
 			</div>
 			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
 				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>
@@ -70,7 +70,7 @@
 					<b> Comments:</b>
 				</div>
 				<div class = "col-md-2 col-md-offset-6 event-thumbnail-col">
-					<a class="btn btn-default" href="" role = "button">Add Comment</a>
+					<a href="" data-target="#addCommentModal" data-toggle="modal" class="btn btn-default">Add comment</a>
 				</div>
 			</div>
 			<div class = "row" ng-repeat = "comment in comments" >
@@ -79,7 +79,7 @@
 						<img src = "{{comment.userId.profile_pic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
 					</div>
 					<div class = "col-md-5 event-thumbnail-col user-comment">
-						<p><b>{{comment.userId.name}} {{comment.userId.last_name}}:</b></p>
+						<p><b><a href = '/api/users/{{comment.userId.id}}'>{{comment.userId.name}} {{comment.userId.last_name}}:</a></b></p>
 						<p>{{comment.body}}</p>
 					</div>
 				</div>
@@ -133,5 +133,39 @@
 	</div>
 	</div>
 </div>
-
-	
+</div>
+<div id="addCommentModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content container-fluid">
+	      
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h1>Add comment</h1>
+	      </div>
+	      
+	      <div class="modal-body">		      
+			<div class="container-fluid">
+				<form id = "newCommentForm" >	
+				<div class="form-group">
+					
+					
+					<div class = "row">
+						<div class="row">
+						<div class="form-group col-sm-12">
+							  <label for="eventdetail">Comment: </label>
+							  <textarea class="form-control" rows="5" id="eventdetail" ng-model="newComment" placeholder="Enter here your comment" required></textarea>
+							</div>
+						</div>
+					</div>
+					<div class = "row">	
+						<div class = "col-sm-6">
+							<input type = "button" class="btn btn-default" ng-click= "submitComment()"  name = "useImage" value = 'Submit comment' data-dismiss="modal">
+						</div>	
+					</div>	
+				</div>	
+			 </form>	
+		</div>
+	</div>
+	</div>
+	</div>
+</div>	

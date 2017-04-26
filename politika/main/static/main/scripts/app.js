@@ -68,7 +68,7 @@ myApp.component('eventDetail', {
 		});
 		
 		
-		//$scope.users = userService;
+		
 		$scope.getImage = function(){
 			console.log($scope.event.id)
 			var newMedia = "{ \"path\": \"" + $scope.image + "\"}"
@@ -80,6 +80,15 @@ myApp.component('eventDetail', {
 			
 		}
 		
+		$scope.submitComment = function(){
+			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId":1}, function(){
+				
+				
+				commentService.query({eventId:$scope.event.id}, function(resp){
+					$scope.comments = resp
+				});
+			});
+		}
 		
 		
 		
