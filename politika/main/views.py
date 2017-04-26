@@ -110,10 +110,10 @@ def usersApi(request, userId = None):
 	if request.method == 'GET':
 		if userId:
 			user = OurUser.objects.get(id=userId)
-			allEvents = user.event_set.all()
+			
 			events_org = Event.objects.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
-			events_go = allEvents.filter(organizer=user)
+			events_go = user.event_set.all()
 			events_go_json = [e.to_json() for e in events_go]
 			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
 		else:

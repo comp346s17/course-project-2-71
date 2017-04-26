@@ -64,31 +64,36 @@ myApp.component('eventDetail', {
 		});
 		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
-			$scope.comments = resp
+			$scope.comments = resp;
 		});
 		
 		
 		
 		$scope.getImage = function(){
 			console.log($scope.event.id)
-			var newMedia = "{ \"path\": \"" + $scope.image + "\"}"
+			var newMedia = "{ \"path\": \"" + $scope.image + "\"}";
 			
 			eventsService.update({id: $routeParams.eventId}, {"media_list": newMedia}, function(){
-				var newMediaDic = { "path": $scope.image}
-				$scope.event.media_list.push(newMediaDic)
+				var newMediaDic = { "path": $scope.image};
+				$scope.event.media_list.push(newMediaDic);
 			});
 			
+		};
+		$scope.going = function(){
+			//should be current user
+			userService.get({id: 1}, function(resp){
+				user = resp;				
+				console.log(user.events_go);
+			}); 
 		}
-		
 		$scope.submitComment = function(){
 			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId":1}, function(){
-				
-				
+							
 				commentService.query({eventId:$scope.event.id}, function(resp){
-					$scope.comments = resp
+					$scope.comments = resp;
 				});
 			});
-		}
+		};
 		
 		//come back to this
 		/* $scope.submitLike = function(like, comment){

@@ -12,13 +12,14 @@ class OurUser(models.Model):
 	profile_pic = models.TextField()
 	about = models.TextField()
 	def to_json(self):
-	
+		event_set = self.event_set.all()
 		return {
 		  'id': self.id,
 		  'name': self.name,
 		  'last_name': self.last_name,
 		  'profile_pic': self.profile_pic,
-		  'about': self.about
+		  'about': self.about,
+		 
 		}
 
 
