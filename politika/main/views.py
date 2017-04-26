@@ -5,6 +5,7 @@ import json
 import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from forms import SignUpForm
 
 
 def index(request):
@@ -125,13 +126,13 @@ def usersApi(request, userId = None):
 	elif request.method == 'POST':
 		params = json.loads(request.body)
 		username = params.get(username, 'No username') # Second param is default value
-		name = params.get(name, 'No first name')
-		last_name = params.get(last_name, 'No last name')
-		profile_pic = params.get(profile_pic, 'No profile pic')
-		about = params.get(about, 'No about')
+		first_name = params.get(first_name, 'Anonymous')
+		last_name = params.get(last_name, '')
+		profile_pic = params.get(profile_pic, '')
+		about = params.get(about, '')
 		user = OurUser(
 			username = username,
-			name = name,
+			first_name = first_name,
 			last_name = last_name,
 			profile_pic = profile_pic,
 			about = about)
@@ -144,18 +145,18 @@ def usersApi(request, userId = None):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            name = form.cleaned_data.get('name')
-            last_name = form.cleaned_data.get('last_name')
-            user = authenticate(username=username, password=password)
-            ourUser = OurUser(user=user, name=name, last_name=last_name)
-            ourUser.save()
+            user = form.save()
+            user.refresh_from_db()
+            # username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user.ouruser.first_name = form.cleaned_data.get('first_name')
+            user.ouruser.last_name = form.cleaned_data.get('last_name')
+            user.save()
+            user = authenticate(username=user.username, password=password)
             login(request, user)
             return redirect('/')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
     return redirect('/', {'form' : form})
