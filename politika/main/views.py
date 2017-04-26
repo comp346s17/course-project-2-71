@@ -27,7 +27,9 @@ def eventsApi(request, eventId=None):
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
+
 			myMediaList = "[]"
+
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
 			event.save()
@@ -74,6 +76,7 @@ def eventsApi(request, eventId=None):
 			event.save()
 			return redirect("/")
 
+
 def commentsApi(request, eventId, commentId=None):
 	
 		if(request.method == 'GET'):
@@ -100,3 +103,40 @@ def commentsApi(request, eventId, commentId=None):
 		elif(request.method == 'PUT'):
 			pass			
 			
+
+
+def usersApi(request, userId = None):
+	if request.method == 'GET':
+		if userId:
+			user = OurUser.objects.get(id=userId)
+			allEvents = user.event_set.all()
+			events_org = allEvents.filter(organizer=request.user)
+			events_org_json = [e.to_json() for e in events_org]
+			events_go = allEvents.filter(organizer=request.user)
+			events_go_json = [e.to_json() for e in events_go]
+			return JsonResponse({user: user.to_json(), events_org: events_org_json, events_go: events_go_json})
+		else:
+			users = OurUser.objects.all()
+			allUsers = [u.to_json() for u in users] # shorthand for loop
+			return JsonResponse(allUsers, safe=False)
+	elif request.method == 'POST':
+		params = json.loads(request.body)
+		username = params.get(username, 'No username') # Second param is default value
+		name = params.get(name, 'No first name')
+		last_name = params.get(last_name, 'No last name')
+		profile_pic = params.get(profile_pic, 'No profile pic')
+		about = params.get(about, 'No about')
+		user = OurUser(
+			username = username,
+			name = name,
+			last_name = last_name,
+			profile_pic = profile_pic,
+			about = about)
+		user.save()
+		return JsonResponse(user.to_json())		
+	else : #delete
+		user = OurUser.objects.get(id=userId)
+		user.delete()
+		return JsonResponse(user.to_json())		
+
+

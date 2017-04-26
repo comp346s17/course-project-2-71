@@ -11,7 +11,10 @@ myApp.service('eventsService', function($resource) {
 
 myApp.service('userService', function($resource){
 	return $resource('/api/users/:id', {});
+
+
 });
+
 
 myApp.service('commentService', function($resource){
 	return $resource('/api/comments/:eventId/:commentId',{}, {
@@ -101,8 +104,12 @@ myApp.component('logIn', {
 
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
-	controller: function($scope){
-		$scope.image = "/static/main/img/userImage.png"
+	controller: function($scope, userService){
+		userService.get({id: $routeParams.userId}, function(resp){
+			$scope.user = resp.user;
+			$scope.events_org = resp.events_org;
+			$scope.events_go = resp.events_go;
+		})
 	}
 });
 

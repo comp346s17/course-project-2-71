@@ -2,14 +2,14 @@
 <div class="row">
 		<!-- profile info goes here -->
 		<div class = "col-sm-3 col-sm-offset-1">
-			<img src = "{{image}}" class = "img-rounded img-responsive"></img>
+			<img src = "{{user.profile_pic}}" class = "img-rounded img-responsive"></img>
 		</div>
 		<div class = "col-sm-7">
 			<div class="page-header">
-				<h1>Sarah Lee</h1>
+				<h1>{{user.name}} {{user.last_name}}</h1>
 			</div>
 			<p><b>About</b></p>
-			<p>I'm a high school teacher interested in environmental issues.</p><br></br>
+			<p>{{user.about}}</p><br></br>
 
 			<ul class="nav nav-tabs" data-tabs="tabs">
 			  <li class="active"><a data-toggle="tab" data-target="#organize">Events I organize</a></li>
@@ -19,15 +19,19 @@
 			<div class="tab-content">
 			  <div id="organize" class="tab-pane fade in active">
 			    <h3>Events I organize</h3>
+			    <div ng-repeat = "event in events_org">
 			    <ul>
-			    	<li><a href="">The greatest event ever</a></li>
+			    	<li><a href="/api/events/{{event.id}}">{{event.title}}</a></li>
 			    </ul>
+			    </div>
 			  </div>
 			  <div id="going" class="tab-pane fade">
 			    <h3>Events I'm going to</h3>
+			    <div ng-repeat = 'event in events_go'>
 			    <ul>
-			    	<li><a href="">The greatest event ever</a></li>
+			    	<li><a href="/api/events/{{event.id}}">{{event.title}}</a></li>
 			    </ul>
+			    </div>
 			  </div>
 			</div> 	
 		</div>
