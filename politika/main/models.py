@@ -33,7 +33,7 @@ class Event(models.Model):
 	endTime = models.TimeField()
 	description = models.TextField()
 	media_list = models.TextField()
-	attendees = models.ManyToManyField(OurUser, through='junctionEventUser', related_name = 'attendeesId')
+	attendees = models.ManyToManyField(OurUser, through='junctionEventUser', related_name = 'event_set')
 	def to_json(self):
 		return {
 		  'id': self.id,

@@ -8,11 +8,11 @@
 				<span class = "event-title text-center"> {{event.title}} </span> <br></br>
 				<span class = "event-detail text-center">Location: {{event.location.city}}</span> <br></br>
 				<span class = "event-detail text-center">Date: {{event.date}} {{event.startTime}} - {{event.endTime}}</span><br></br>
-				<span class = "event-detail text-center">Organizer: <a href = '/api/users/{{event.organizer.id}}'>{{event.organizer.name}} {{event.organizer.last_name}}</a></span> 
+				<span class = "event-detail text-center">Organizer:  <a href = '#!/user-profile/{{event.organizer.id}}'>{{event.organizer.name}} {{event.organizer.last_name}}</a></span> 
 			</div>
 			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
 				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>
-				<button type="button" class="btn btn-default" name = "going">I'm Going!</button>
+				<button type="button" class="btn btn-default" ng-click = "going()" name = "going">I'm Going!</button>
 			</div>
 		</div>
 	</div>
@@ -79,16 +79,16 @@
 						<img src = "{{comment.userId.profile_pic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
 					</div>
 					<div class = "col-md-5 event-thumbnail-col user-comment">
-						<p><b><a href = '/api/users/{{comment.userId.id}}'>{{comment.userId.name}} {{comment.userId.last_name}}:</a></b></p>
+						<p><b><a href = '#!/user-profile/{{comment.userId.id}}'>{{comment.userId.name}} {{comment.userId.last_name}}:</a></b></p>
 						<p>{{comment.body}}</p>
 					</div>
 				</div>
 				<div class = "row in-comment-row">
 					<div class = "col-md-2 col-md-offset-8 event-thumbnail-col">
-						<button type="button" class="btn  btn-sm">
+						<button type="button"  class="btn  btn-sm">
 							<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{comment.liked}}
 						</button>
-						<button type="button" class="btn  btn-sm">
+						<button type="button"  class="btn  btn-sm">
 							<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{comment.disliked}}
 						</button>
 					</div>

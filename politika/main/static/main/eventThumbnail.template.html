@@ -11,7 +11,7 @@
 				<span class = "event-title text-center"> <a href="#!/event/{{event.id}}" >{{event.title}}</a></span> <br></br>
 				<span class = "event-detail text-center">Location: {{event.location.city}}</span> <br></br>
 				<span class = "event-detail text-center">Date: {{event.date}}, {{event.startTime}} - {{event.endTime}}</span><br></br>
-				<span class = "event-detail text-center">Organizer: <a href = '/api/users/{{event.organizer.id}}'> {{event.organizer.name}} {{event.organizer.last_name}}</a></span> 
+				<span class = "event-detail text-center">Organizer: <a href = '#!/user-profile/{{event.organizer.id}}'> {{event.organizer.name}} {{event.organizer.last_name}}</a></span> 
 			</div>
 			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
 				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>

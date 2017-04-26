@@ -49,7 +49,7 @@ def eventsApi(request, eventId=None):
 			event.title = params.get('title', event.title)
 			event.location = params.get('location', event.location)
 			event.going = params.get('going', event.going)
-			print('gete here spost wiht id')
+
 			tempDate = params.get('date', '')
 			if tempDate != '':
 				event.date =  datetime.datetime.strptime(str(tempDate), '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -101,7 +101,8 @@ def commentsApi(request, eventId, commentId=None):
 			return redirect("/")
 			
 		elif(request.method == 'PUT'):
-			pass			
+			params = json.loads(request.body)
+			pass
 			
 
 
@@ -110,11 +111,11 @@ def usersApi(request, userId = None):
 		if userId:
 			user = OurUser.objects.get(id=userId)
 			allEvents = user.event_set.all()
-			events_org = allEvents.filter(organizer=request.user)
+			events_org = Event.objects.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
-			events_go = allEvents.filter(organizer=request.user)
+			events_go = allEvents.filter(organizer=user)
 			events_go_json = [e.to_json() for e in events_go]
-			return JsonResponse({user: user.to_json(), events_org: events_org_json, events_go: events_go_json})
+			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
 		else:
 			users = OurUser.objects.all()
 			allUsers = [u.to_json() for u in users] # shorthand for loop

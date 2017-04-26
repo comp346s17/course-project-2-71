@@ -90,8 +90,16 @@ myApp.component('eventDetail', {
 			});
 		}
 		
-		
-		
+		//come back to this
+		/* $scope.submitLike = function(like, comment){
+			if(like == 1){
+				var currentLike = comment.liked + 1;
+			}
+			else if(like == 0){
+				var currentDislike = comment.disliked + 1;
+			}
+		};
+		 */
 		
 	}
 });
@@ -113,7 +121,7 @@ myApp.component('logIn', {
 
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
-	controller: function($scope, userService){
+	controller: function($scope, userService, $routeParams){
 		userService.get({id: $routeParams.userId}, function(resp){
 			$scope.user = resp.user;
 			$scope.events_org = resp.events_org;
@@ -141,7 +149,7 @@ myApp.config(function($routeProvider, $httpProvider, $resourceProvider ) {
 	   when('/event/:eventId', {
 			template: '<event-detail></event-detail>'
 	   }).
-	   when('/user-profile', {
+	   when('/user-profile/:userId', {
 			template: '<user-profile></user-profile>'
 	   }).
 	   when('/new-event', {
