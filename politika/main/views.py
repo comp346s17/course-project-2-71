@@ -73,4 +73,30 @@ def eventsApi(request, eventId=None):
 				
 			event.save()
 			return redirect("/")
+
+def commentsApi(request, eventId, commentId=None):
+	
+		if(request.method == 'GET'):
+			comments = Comment.objects.filter(eventId = Event.objects.get(id=eventId))
+			allComments = [c.to_json() for c in comments] # shorthand for loop
+			
+			return JsonResponse(allComments, safe=False) # safe=False required for sending lists
+		elif(request.method == 'POST'):
+			params = json.loads(request.body)
+			myUser =  OurUser.objects.get(id=params.get('userId'))
+			myEvent = Event.objects.get(id=eventId)
+			myBody = params.get('body')				
+			myLiked = 0
+			myDisliked = 0
+			comment = Comment(userId=myUser, eventId=myEvent, body = myBody, liked = myLiked, disliked = myDisliked)
+			comment.save()
+			return redirect("/")
+			
+		elif(request.method == 'DELETE'):
+			comment = Comment.objects.get(id=commentId)
+			event.delete()
+			return redirect("/")
+			
+		elif(request.method == 'PUT'):
+			pass			
 			

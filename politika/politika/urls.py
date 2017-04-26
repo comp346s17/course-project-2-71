@@ -22,4 +22,6 @@ urlpatterns = [
 	url(r'^$', views.index),
 	url(r'^api/events/$', views.eventsApi),
 	url(r'^api/events/(?P<eventId>[0-9]+)$', views.eventsApi),
+	url(r'^api/comments/(?P<eventId>[0-9]+)/$', views.commentsApi),
+	url(r'^api/comments/(?P<eventId>[0-9]+)/(?P<commentId>[0-9]+)$', views.commentsApi)
 ]

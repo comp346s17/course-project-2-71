@@ -76,11 +76,11 @@
 			<div class = "row" ng-repeat = "comment in comments" >
 				<div class = "row in-comment-row">
 					<div class = "col-md-2 col-md-offset-2 event-thumbnail-col">
-						<img src = "{{users.get(comment.userId).profilepic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
+						<img src = "{{comment.userId.profile_pic}}" class = "img-rounded img-responsive user-thumbnail-photo"></img>
 					</div>
 					<div class = "col-md-5 event-thumbnail-col user-comment">
-						<p><b>{{users.get(comment.userId).userName}}:</b></p>
-						<p>{{comment.commentText}}</p>
+						<p><b>{{comment.userId.name}} {{comment.userId.last_name}}:</b></p>
+						<p>{{comment.body}}</p>
 					</div>
 				</div>
 				<div class = "row in-comment-row">

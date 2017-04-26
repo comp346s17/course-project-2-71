@@ -58,8 +58,8 @@ class Comment(models.Model):
 	def to_json(self):
 		return {
 		  'id': self.id,
-		  'eventId': self.eventId,
-		  'userId': self.userId,
+		  'eventId': self.eventId.to_json(),
+		  'userId': self.userId.to_json(),
 		  'body': self.body,
 		  'liked': self.liked,
 		  'disliked': self.disliked

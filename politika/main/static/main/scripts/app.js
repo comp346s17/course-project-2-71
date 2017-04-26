@@ -9,79 +9,15 @@ myApp.service('eventsService', function($resource) {
 	
 });
 
-myApp.service('commentService', function(){
-	var comments = [{
-		id:1,
-		userId: 1,
-		eventId:1,
-		commentTitle: "great people!",
-		commentText: "I met some many woke people!",
-		liked: 2,
-		disliked: 0,
-		
-		
-	},{
-		id:2,
-		userId: 2,
-		eventId:2,
-		commentTitle: "Excited!",
-		commentText: "I\'m looking forward to this",
-		liked: 2,
-		disliked: 0,
-		
-		
-	},{
-		id:3,
-		userId: 2,
-		eventId:1,
-		commentTitle: "I agree!",
-		commentText: "I was very inspired by everyone I met! definitely greatest even ever!",
-		liked: 4,
-		disliked: 0,
-		
-		
-	}];
-	return {
-		all: function() { return comments; },
-		get: function(eventId) {
-			return comments.filter(function(comment) {
-				return comment.eventId == eventId;
-			});
-		}
-
-	};
+myApp.service('userService', function($resource){
+	return $resource('/api/users/:id', {});
 });
 
-myApp.service('userService', function(){
-	var users = [{
-		id:1,
-		userName: "OurVeryFirstUser",
-		password: "123324",
-		eventsGoing: [1],
-		profilepic: "/static/main/img/user-profile.png"
-		
-		
-	},{
-		id:2,
-		userName: "ImOnlySecond",
-		password: "123324",
-		eventsGoing: [2],
-		profilepic: "/static/main/img/profile-pic2.jpg"
-		
-		
-	}];
-	return {
-		all: function() { return users; },
-		get: function(userId) {
-			return users.find(function(user) {
-				return user.id == userId;
-			});
-		}
-
-	};
+myApp.service('commentService', function($resource){
+	return $resource('/api/comments/:eventId/:commentId',{}, {
+		'update': { method:'PUT' }
+	});
 });
-
-
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
@@ -124,16 +60,21 @@ myApp.component('eventDetail', {
 			$scope.event = resp;
 		});
 		
-		$scope.comments = commentService.get($routeParams.eventId);
+		commentService.query({eventId:$routeParams.eventId}, function(resp){
+			$scope.comments = resp
+		});
 		
 		
-		$scope.users = userService;
+		//$scope.users = userService;
 		$scope.getImage = function(){
 			console.log($scope.event.id)
 			var newMedia = "{ \"path\": \"" + $scope.image + "\"}"
-			var newMediaDic = { "path": $scope.image}
-			eventsService.update({id: $routeParams.eventId}, {"media_list": newMedia});
-			$scope.event.media_list.push(newMediaDic)
+			
+			eventsService.update({id: $routeParams.eventId}, {"media_list": newMedia}, function(){
+				var newMediaDic = { "path": $scope.image}
+				$scope.event.media_list.push(newMediaDic)
+			});
+			
 		}
 		
 		
