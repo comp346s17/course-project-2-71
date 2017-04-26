@@ -3,6 +3,8 @@ from models import OurUser, Event, Comment, junctionEventUser
 from django.http import JsonResponse
 import json
 import datetime
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 
 def index(request):
@@ -110,8 +112,9 @@ def usersApi(request, userId = None):
 	if request.method == 'GET':
 		if userId:
 			user = OurUser.objects.get(id=userId)
-			
+
 			events_org = Event.objects.filter(organizer=user)
+
 			events_org_json = [e.to_json() for e in events_org]
 			events_go = user.event_set.all()
 			events_go_json = [e.to_json() for e in events_go]
@@ -140,4 +143,20 @@ def usersApi(request, userId = None):
 		user.delete()
 		return JsonResponse(user.to_json())		
 
-
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            last_name = form.cleaned_data.get('last_name')
+            user = authenticate(username=username, password=password)
+            ourUser = OurUser(user=user, name=name, last_name=last_name)
+            ourUser.save()
+            login(request, user)
+            return redirect('/')
+    else:
+        form = UserCreationForm()
+    return redirect('/', {'form' : form})
