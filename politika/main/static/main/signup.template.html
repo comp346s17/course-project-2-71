@@ -10,7 +10,14 @@
 	      <div class="modal-body">
 	      		<div class="container-fluid">
 					<div class="col-sm-6">
-						<form id="signup-form" method="get" action="">
+						<form id="signup-form" method="post" action="">
+							<div class="form-group row">
+							  <div class="col-sm-6"><label for="name">First name:</label>
+							  <input type="text" class="form-control" id="name" placeholder="First name" required minlength="2"/></div>
+							  <div class="col-sm-6"><label for="last_name">Last name:</label>
+							  <input type="text" class="form-control" id="last_name" placeholder="Last name" required minlength="2"/></div>
+							</div>
+
 							<div class="form-group">
 							  <label for="username">Username:</label>
 							  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required minlength="3"/>

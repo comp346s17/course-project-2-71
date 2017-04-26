@@ -9,10 +9,9 @@ class OurUser(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=50)
-	profile_pic = models.TextField()
-	about = models.TextField()
+	profile_pic = models.TextField(blank=True, null=True)
+	about = models.TextField(blank=True, null=True)
 	def to_json(self):
-	
 		return {
 		  'id': self.id,
 		  'name': self.name,

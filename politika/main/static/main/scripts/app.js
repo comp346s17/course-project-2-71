@@ -11,8 +11,6 @@ myApp.service('eventsService', function($resource) {
 
 myApp.service('userService', function($resource){
 	return $resource('/api/users/:id', {});
-
-
 });
 
 
@@ -25,7 +23,6 @@ myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
 		eventsService.query(function(resp){
-			
 			$scope.events = resp;
 		});
 	}
