@@ -23,26 +23,30 @@ def search(request):
 		
 		entry_query = get_query(query_string, ['title', 'description','location'])
 		found_entries = Event.objects.filter(entry_query)
-		
-		results = [e.to_json() for e in found_entries]
+		events = filterOutPastEvents(found_entries)
+		results = [e.to_json() for e in events]
 		print(results)
 	else: #the user searched for an empty query, so return all results
 		events = Event.objects.all()
+		events = filterOutPastEvents(events)
 		results = [e.to_json() for e in events]
 	return JsonResponse(results, safe=False) 
 	
-   
+def filterOutPastEvents(eventList):
+	noPastEvents = []	
+	for event in eventList:
+		eventDateTime =  datetime.datetime.combine(event.date, event.endTime)
+		if(eventDateTime >= datetime.datetime.now()):
+			noPastEvents.append(event)
+	return noPastEvents		
 	
 def eventsApi(request, eventId=None):
 	if(eventId == None):
 		if(request.method == 'GET'):
 			events = Event.objects.all()
-			noPastEvents = [];
+			noPastEvents = filterOutPastEvents(events)
 			#filter no it does not include past events
-			for event in events:
-				eventDateTime =  datetime.datetime.combine(event.date, event.endTime)
-				if(eventDateTime >= datetime.datetime.now()):
-					noPastEvents.append(event)
+			
 			
 			allEvents = [e.to_json() for e in noPastEvents] # shorthand for loop
 			
