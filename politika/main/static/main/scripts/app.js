@@ -1,10 +1,24 @@
 var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
 
 
+myApp.controller('myCtrl', function($scope, $rootScope) {
+   
+	$scope.submitQuery = function(){
+		$rootScope.query = $scope.query
+		console.log($rootScope.query)
+		console.log($scope.query)
+		console.log('gethere')
+	}
+});
 
 myApp.service('eventsService', function($resource) {
 	return $resource('/api/events/:id',{}, {
 		'update': { method:'PUT' }
+	});
+	
+});
+myApp.service('searchService', function($resource) {
+	return $resource('/api/search/',{}, {
 	});
 	
 });
@@ -28,6 +42,17 @@ myApp.component('eventThumbnails', {
 	}
 });
 
+myApp.component('searchResults', {
+	templateUrl: '/static/main/eventThumbnail.template.html',
+	controller: function($scope, searchService, $routeParams, $rootScope) {
+		console.log($rootScope.query)
+		var query = {"q": $rootScope.query}
+		console.log(query)
+		searchService.query(query, function(resp){
+			$scope.events = resp;
+		}); 
+	}
+});
 
 
 myApp.component('newEventForm', {
@@ -42,7 +67,7 @@ myApp.component('newEventForm', {
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				console.log(mystartTime)
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:1, image: $scope.image }, function(resp) {
+				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, function(resp) {
 				// executed on successful response
 			});
 			
@@ -78,16 +103,18 @@ myApp.component('eventDetail', {
 		};
 		$scope.going = function(){
 			//should be current user
-			userService.get({id: 1}, function(resp){
+			userService.get({id: 2}, function(resp){
 				user = resp;				
 				console.log(user.events_go);
 			}); 
 		}
 		$scope.submitComment = function(){
-			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId":1}, function(){
-							
+			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId":2}, function(){
+				console.log('get here')	
 				commentService.query({eventId:$scope.event.id}, function(resp){
 					$scope.comments = resp;
+					console.log(resp)
+					console.log(resp.userId)
 				});
 			});
 		};
@@ -139,7 +166,7 @@ myApp.component('advSearch', {
 	}
 });
 
-myApp.config(function($routeProvider, $httpProvider, $resourceProvider ) {
+myApp.config(function($routeProvider, $httpProvider, $resourceProvider) {
 	$httpProvider.defaults.xsrfCookieName = 'csrftoken';
 	$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
@@ -157,7 +184,10 @@ myApp.config(function($routeProvider, $httpProvider, $resourceProvider ) {
 	   when('/new-event', {
 			template: '<new-event-form></new-event-form>'
 	   }).
-		otherwise('/');
+	   when('/search/',{
+		  template: '<search-results></search-resuls>'
+	   }).
+	   otherwise('/');
 	});
 
 

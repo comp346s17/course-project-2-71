@@ -5,10 +5,28 @@ import json
 import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-
+from forms import SignUpForm
+from search import get_query
 
 def index(request):
 	return render(request,'main/index.html')
+
+#from "http://julienphalip.com/post/2825034077/adding-search-to-a-django-site-in-a-snap"
+def search(request):
+	query_string = ''
+	found_entries = None
+	if ('q' in request.GET) and request.GET['q'].strip():
+		query_string = request.GET['q']
+		entry_query = get_query(query_string, ['title', 'description','location'])
+		found_entries = Event.objects.filter(entry_query)
+		results = [e.to_json() for e in found_entries]
+		print(results)
+		return JsonResponse(results, safe=False) 
+	
+    # return render_to_response('search/search_results.html',
+                          # { 'query_string': query_string, 'found_entries': found_entries },
+                          # context_instance=RequestContext(request))
+
 	
 def eventsApi(request, eventId=None):
 	if(eventId == None):
@@ -126,13 +144,13 @@ def usersApi(request, userId = None):
 	elif request.method == 'POST':
 		params = json.loads(request.body)
 		username = params.get(username, 'No username') # Second param is default value
-		name = params.get(name, 'No first name')
-		last_name = params.get(last_name, 'No last name')
-		profile_pic = params.get(profile_pic, 'No profile pic')
-		about = params.get(about, 'No about')
+		first_name = params.get(first_name, 'Anonymous')
+		last_name = params.get(last_name, '')
+		profile_pic = params.get(profile_pic, '')
+		about = params.get(about, '')
 		user = OurUser(
 			username = username,
-			name = name,
+			first_name = first_name,
 			last_name = last_name,
 			profile_pic = profile_pic,
 			about = about)
@@ -145,18 +163,18 @@ def usersApi(request, userId = None):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            name = form.cleaned_data.get('name')
-            last_name = form.cleaned_data.get('last_name')
-            user = authenticate(username=username, password=password)
-            ourUser = OurUser(user=user, name=name, last_name=last_name)
-            ourUser.save()
+            user = form.save()
+            user.refresh_from_db()
+            # username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user.ouruser.first_name = form.cleaned_data.get('first_name')
+            user.ouruser.last_name = form.cleaned_data.get('last_name')
+            user.save()
+            user = authenticate(username=user.username, password=password)
             login(request, user)
             return redirect('/')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
     return redirect('/', {'form' : form})
