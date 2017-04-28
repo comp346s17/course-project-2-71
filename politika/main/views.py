@@ -16,12 +16,19 @@ def index(request):
 def search(request):
 	query_string = ''
 	found_entries = None
+	
 	if ('q' in request.GET) and request.GET['q'].strip():
+	
 		query_string = request.GET['q']
+		
 		entry_query = get_query(query_string, ['title', 'description','location'])
 		found_entries = Event.objects.filter(entry_query)
+		
 		results = [e.to_json() for e in found_entries]
 		print(results)
+	else: #the user searched for an empty query, so return all results
+		events = Event.objects.all()
+		results = [e.to_json() for e in events]
 	return JsonResponse(results, safe=False) 
 	
    
