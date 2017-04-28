@@ -54,3 +54,7 @@ hmtl{
 .user-thumbnail-photo{
 	max-height: 100px;
 }
+
+.noResults{
+	padding-top: 20px;
+}

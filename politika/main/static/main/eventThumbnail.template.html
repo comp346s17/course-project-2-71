@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 
 <div class="container-fluid">
+
+<div ng-if = "noEvents">
+<div class = "row">
+		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 noResults">
+			<p class = "text-center">No events to show. Why don't you organize one?</p>
+		</div>
+</div> 
+
+</div>
+
+<div ng-if = "noResults">
+<div class = "row">
+		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 noResults">
+			<p class = "text-center">No results were found. Why don't you organize an event?</p>
+		</div>
+</div> 
+
+</div>
 	<div class="row" ng-repeat = "event in events">
 		<div class="col-md-10 col-md-offset-1 col-sm-7 col-xs-7 col-sm-offset-1 event-thumbnail-main-col">
 			<div class = "col-md-3 event-thumbnail-col ">
@@ -19,4 +37,5 @@
 			</div>
 		</div>
 	</div>
+	
 </div>

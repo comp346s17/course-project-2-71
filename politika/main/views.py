@@ -21,12 +21,9 @@ def search(request):
 		found_entries = Event.objects.filter(entry_query)
 		results = [e.to_json() for e in found_entries]
 		print(results)
-		return JsonResponse(results, safe=False) 
+	return JsonResponse(results, safe=False) 
 	
-    # return render_to_response('search/search_results.html',
-                          # { 'query_string': query_string, 'found_entries': found_entries },
-                          # context_instance=RequestContext(request))
-
+   
 	
 def eventsApi(request, eventId=None):
 	if(eventId == None):

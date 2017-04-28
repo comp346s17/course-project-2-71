@@ -37,6 +37,9 @@ myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams) {
 		eventsService.query(function(resp){
+			if(resp.length == 0) {
+				$scope.noEvents = 1;
+			}
 			$scope.events = resp;
 		});
 	}
@@ -49,6 +52,9 @@ myApp.component('searchResults', {
 		var query = {"q": $rootScope.query}
 		console.log(query)
 		searchService.query(query, function(resp){
+			if(resp.length == 0) {
+				$scope.noResults = 1;
+			}
 			$scope.events = resp;
 		}); 
 	}
