@@ -12,6 +12,7 @@ def index(request):
 	return render(request,'main/index.html')
 
 #from "http://julienphalip.com/post/2825034077/adding-search-to-a-django-site-in-a-snap"
+#simple search our event database
 def search(request):
 	query_string = ''
 	found_entries = None
@@ -29,7 +30,14 @@ def eventsApi(request, eventId=None):
 	if(eventId == None):
 		if(request.method == 'GET'):
 			events = Event.objects.all()
-			allEvents = [e.to_json() for e in events] # shorthand for loop
+			noPastEvents = [];
+			#filter no it does not include past events
+			for event in events:
+				eventDateTime =  datetime.datetime.combine(event.date, event.endTime)
+				if(eventDateTime >= datetime.datetime.now()):
+					noPastEvents.append(event)
+			
+			allEvents = [e.to_json() for e in noPastEvents] # shorthand for loop
 			
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
