@@ -54,3 +54,8 @@ hmtl{
 .user-thumbnail-photo{
 	max-height: 100px;
 }
+
+.error-input{
+	color: rgb(255,0,0);
+	font-style: italic;
+}

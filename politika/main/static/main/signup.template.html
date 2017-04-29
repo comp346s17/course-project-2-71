@@ -10,42 +10,36 @@
 	      <div class="modal-body">
 	      		<div class="container-fluid">
 					<div class="col-sm-6">
-						<form id="signup-form" method="post" action="">
-							{% csrf_token %}
-							{{ form.non_field_errors }}
-
-							<dir class="fieldWrapper form-group">
-								{{ form.first_name.errors }}
-							    <label for="{{ form.first_name.id_for_label }}">First Name:</label>
-							    {{ form.first_name }}
-
-							</dir>
-
-
+						<form name="signup-form" nonvalidate>
 
 							<div class="form-group row">
-							  <div class="col-sm-6"><label for="first_name">First name:</label>
-							  <input type="text" class="form-control" id="first_name" placeholder="First name" required minlength="2"/></div>
-							  <div class="col-sm-6"><label for="last_name">Last name:</label>
-							  <input type="text" class="form-control" id="last_name" placeholder="Last name" required minlength="2"/></div>
+								<label for="first_name">First name:</label>
+								<input type="text" class="form-control" name="first_name" ng-model="first_name" placeholder="eg. Phuc" minlength="2"/>
+							</div>
+
+							<div class="form-group">
+								<label for="last_name">Last name:</label>
+								 <input type="text" class="form-control" name="last_name" ng-model="last_name" placeholder="eg. Nguyen" minlength="2"/></div>
 							</div>
 
 							<div class="form-group">
 							  <label for="username">Username:</label>
-							  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required minlength="3"/>
+							  <input type="text" class="form-control" name="username" ng-model="username" placeholder="eg. phucnguyen" required minlength="3" username/>
+							  <span class="error-input" ng-show="form.username.$error.username">Username already exists</span>
 							</div>
 
 							<div class="form-group">
 							  <label for="password">Password:</label>
-							  <input type="password" class="form-control" id="password" ng-model="password1" placeholder="Password" required minlength="6" /> 
+							  <input type="password" class="form-control" name="password" ng-model="password1" placeholder="at least 6 characters" required minlength="6" />
 							</div>
 
 							<div class="form-group">
 							  <label for="password2">Confirm password:</label>
-							  <input type="password" class="form-control" id="password2" placeholder="Password" required minlength="6" equalTo="#password" /> 
+							  <input type="password" class="form-control" name="password2" placeholder="Password" required minlength="6" equalTo="#password" />
+							  <span class="error-input" ng-show="form.password2.$error.password">Password doesn't match</span> 
 							</div>
 
-							<button type="submit" class="btn btn-default">Submit</button>
+							<button type="submit" class="btn btn-default" ng-disabled="signup-form.$invalid">Submit</button>
 						</form>
 					</div>
 

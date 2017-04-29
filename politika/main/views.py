@@ -3,13 +3,16 @@ from models import OurUser, Event, Comment, junctionEventUser
 from django.http import JsonResponse
 import json
 import datetime
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from rest_framework import permissions, viewsets
+from authentication.permissions import IsAccountOwner
+from main.serializers import OurUserSerializer
+
 from forms import SignUpForm
 
 
 def index(request):
-	return render(request,'main/index.html')
+	form = SignUpForm()
+	return render(request,'main/index.html',{'sign_up_form' : form})
 	
 def eventsApi(request, eventId=None):
 	if(eventId == None):
@@ -109,54 +112,56 @@ def commentsApi(request, eventId, commentId=None):
 			
 
 
-def usersApi(request, userId = None):
-	if request.method == 'GET':
-		if userId:
-			user = OurUser.objects.get(id=userId)
-			allEvents = user.event_set.all()
+def usersApi(request, username = None):
+	if username :
+		user = User.objects.get(username=username)
+		if request.method == 'GET':
+			allEvents = user.ouruser.event_set.all()
 			events_org = allEvents.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
 			events_go = allEvents.filter(organizer=user)
 			events_go_json = [e.to_json() for e in events_go]
 			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
-		else:
-			users = OurUser.objects.all()
-			allUsers = [u.to_json() for u in users] # shorthand for loop
-			return JsonResponse(allUsers, safe=False)
-	elif request.method == 'POST':
+		if request.method == 'DELETE':
+			if (request.user == user):
+				user.delete()
+				return JsonResponse(user.to_json())
+	if request.method == 'POST':
 		params = json.loads(request.body)
-		username = params.get(username, 'No username') # Second param is default value
-		first_name = params.get(first_name, 'Anonymous')
-		last_name = params.get(last_name, '')
-		profile_pic = params.get(profile_pic, '')
-		about = params.get(about, '')
+		# if params.get(password1) and params.get(password2) and  check password mathc?
+		user = User.objects.create_user(params.get(username), params.get(password1))
 		user = OurUser(
-			username = username,
-			first_name = first_name,
-			last_name = last_name,
-			profile_pic = profile_pic,
-			about = about)
+			username = params.get(username),
+			first_name = params.get(first_name, 'Anonymous'),
+			last_name = params.get(last_name, ''),
+			profile_pic = params.get(profile_pic, ''),
+			about = params.get(about, ''))
 		user.save()
 		return JsonResponse(user.to_json())		
-	else : #delete
-		user = OurUser.objects.get(id=userId)
-		user.delete()
-		return JsonResponse(user.to_json())		
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            # username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user.ouruser.first_name = form.cleaned_data.get('first_name')
-            user.ouruser.last_name = form.cleaned_data.get('last_name')
-            user.save()
-            user = authenticate(username=user.username, password=password)
-            login(request, user)
-            return redirect('/')
-    else:
-        form = SignUpForm()
-    return redirect('/', {'form' : form})
+class OurUserViewSet(viewsets.ModelViewSet):
+	lookup_field = 'username'
+	queryset = OurUser.objects.all()
+	serializer_class = OurUserSerializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.AllowAny(),)
+
+		if self.request.method == 'POST':
+			return (permissions.AllowAny(),)
+
+		return (permissions.IsAuthenticated(), IsAccountOwner(),)
+
+	def create(self, request):
+		serializer = self.serializer_class(data=request.data)
+
+		if serializer.is_valid():
+			OurUser.objects.create_user(**serializer.validated_data)
+
+			return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+
+		return Response({
+			'status': 'Bad request',
+			'message': 'Account could not be created with received data.'
+		}, status=status.HTTP_400_BAD_REQUEST)

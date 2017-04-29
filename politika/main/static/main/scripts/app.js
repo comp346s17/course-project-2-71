@@ -9,10 +9,6 @@ myApp.service('eventsService', function($resource) {
 	
 });
 
-myApp.service('userService', function($resource){
-	return $resource('/api/users/:id', {});
-});
-
 
 myApp.service('commentService', function($resource){
 	return $resource('/api/comments/:eventId/:commentId',{}, {
@@ -33,7 +29,6 @@ myApp.component('eventThumbnails', {
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
 	controller: function($scope, eventsService){
-		//nothing goes here yet: access form content: $scope.name, etc
 			$scope.submitEvent = function(){
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
@@ -103,8 +98,12 @@ myApp.component('eventDetail', {
 
 myApp.component('signUp', {
 	templateUrl: '/static/main/signup.template.html',
-	controller: function($scope){
-		//nothing here yet
+	controller: function($scope, userService){
+		$scope.validate = function(){
+
+		}
+		//when I click on sign up button, I'm sending a get request to userApi, I'll get a form back
+		//when I click submit on the sign up form, I'm sending a post request to userApi
 	}
 });
 
@@ -243,5 +242,4 @@ myApp.directive('datetimePicker', function(){
         }
     };
 });
-
 

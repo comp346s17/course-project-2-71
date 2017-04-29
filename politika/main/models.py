@@ -3,32 +3,66 @@ from __future__ import unicode_literals
 from django.db import models
 import json
 import datetime
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
-class OurUser(models.Model):
-	user = models.OneToOneField(User, on_delete = models.CASCADE, related_name='ouruser')
-	first_name = models.CharField(max_length=30, blank=True, null=True)
-	last_name = models.CharField(max_length=50, blank=True, null=True)
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
+
+
+class OurUserManager(BaseUserManager):
+	use_in_migrations = True
+	def create_user(self, username, password=None, **kwargs):
+
+		if not username:
+			raise ValueError('Users must have valid username')
+
+		ouruser = self.model(
+			username= username
+		)
+
+		ouruser.set_password(password)
+		ouruser.save(using=self._db)
+		return ouruser
+
+	def create_superuser(self,username, password, **kwargs):
+		ouruser = self.create_user(username, password=password, **kwargs)
+		ouruser.is_admin = True
+		ouruser.save(using=self._db)
+		return ouruser
+
+
+class OurUser(AbstractBaseUser, PermissionsMixin):
+	username = models.CharField(max_length=40, unique=True)
+	# user = models.OneToOneField(User, on_delete = models.CASCADE, related_name='ouruser')
+	first_name = models.CharField(max_length=40, blank=True, null=True)
+	last_name = models.CharField(max_length=40, blank=True, null=True)
 	profile_pic = models.TextField(blank=True, null=True)
 	about = models.TextField(blank=True, null=True)
-	
-	def to_json(self):
-		return {
-		  'id': self.id,
-		  'name': self.name,
-		  'last_name': self.last_name,
-		  'profile_pic': self.profile_pic,
-		  'about': self.about
-		}
+	is_admin = models.BooleanField(default=False)
 
 
-@receiver(post_save, sender=User)
-def create_ouruser(sender, instance, created, **kwargs):
-    if created:
-        ouruser = OurUser(user=instance)
-        ouruser.save()
+	objects = OurUserManager()
+
+	USERNAME_FIELD = 'username'
+
+	# display username when viewed in console
+	def __unicode__(self):
+		return self.username
+
+	#Django convention
+	def get_full_name(self):
+		return ' '.join([self.first_name, self.last_name])
+
+	def get_short_name(self):
+		return self.first_name
+
+	# def to_json(self):
+	# 	return {
+	# 	  'id': self.id,
+	# 	  'first_name': self.first_name,
+	# 	  'last_name': self.last_name,
+	# 	  'profile_pic': self.profile_pic,
+	# 	  'about': self.about
+	# 	}
 
 
 class Event(models.Model):
