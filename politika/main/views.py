@@ -8,17 +8,49 @@ from authentication.permissions import IsAccountOwner
 from main.serializers import OurUserSerializer
 
 from forms import SignUpForm
-
+from search import get_query
 
 def index(request):
-	form = SignUpForm()
-	return render(request,'main/index.html',{'sign_up_form' : form})
+	return render(request,'main/index.html')
+
+#from "http://julienphalip.com/post/2825034077/adding-search-to-a-django-site-in-a-snap"
+#simple search our event database
+def search(request):
+	query_string = ''
+	found_entries = None
+	
+	if ('q' in request.GET) and request.GET['q'].strip():
+	
+		query_string = request.GET['q']
+		
+		entry_query = get_query(query_string, ['title', 'description','location'])
+		found_entries = Event.objects.filter(entry_query)
+		events = filterOutPastEvents(found_entries)
+		results = [e.to_json() for e in events]
+		print(results)
+	else: #the user searched for an empty query, so return all results
+		events = Event.objects.all()
+		events = filterOutPastEvents(events)
+		results = [e.to_json() for e in events]
+	return JsonResponse(results, safe=False) 
+	
+def filterOutPastEvents(eventList):
+	noPastEvents = []	
+	for event in eventList:
+		eventDateTime =  datetime.datetime.combine(event.date, event.endTime)
+		if(eventDateTime >= datetime.datetime.now()):
+			noPastEvents.append(event)
+	return noPastEvents		
 	
 def eventsApi(request, eventId=None):
 	if(eventId == None):
 		if(request.method == 'GET'):
 			events = Event.objects.all()
-			allEvents = [e.to_json() for e in events] # shorthand for loop
+			noPastEvents = filterOutPastEvents(events)
+			#filter no it does not include past events
+			
+			
+			allEvents = [e.to_json() for e in noPastEvents] # shorthand for loop
 			
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
@@ -111,7 +143,6 @@ def commentsApi(request, eventId, commentId=None):
 			pass
 			
 
-
 def usersApi(request, username = None):
 	if username :
 		user = User.objects.get(username=username)
@@ -119,7 +150,7 @@ def usersApi(request, username = None):
 			allEvents = user.ouruser.event_set.all()
 			events_org = allEvents.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
-			events_go = allEvents.filter(organizer=user)
+			events_go = user.event_set.all()
 			events_go_json = [e.to_json() for e in events_go]
 			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
 		if request.method == 'DELETE':
@@ -139,6 +170,7 @@ def usersApi(request, username = None):
 		user.save()
 		return JsonResponse(user.to_json())		
 
+# https://thinkster.io/django-angularjs-tutorial#registering-new-users
 class OurUserViewSet(viewsets.ModelViewSet):
 	lookup_field = 'username'
 	queryset = OurUser.objects.all()

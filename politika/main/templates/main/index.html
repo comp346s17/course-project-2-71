@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html ng-app="myApp" ng-controller="myCtrl">
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	<meta charset="utf-8">
@@ -62,12 +62,15 @@
   <div class="row" style="background-color: #1a1a1a; padding: 20px ">
 
     <div class="col-lg-5 col-md-5 col-sm-6 col-md-offset-1">
-    	<div class="input-group ">
-	      <span class="input-group-btn">
-	        <button class="btn btn-default" type="button" style="background-color: #99cc00">Search</button>
+    	<form>
+		<div class="input-group ">
+	      
+	      <input type="text" name = "q" class="form-control" ng-model="query" placeholder="Search for..."/>
+		  <span class="input-group-btn">
+	        <a href="#!/search" class="btn btn-default" ng-click = "submitQuery()" type="submit">Search</a>
 	      </span>
-	      <input type="text" class="form-control" placeholder="Search for...">
 	    </div><!-- /input-group -->
+		</form>
     </div>
 
     <div class="col-lg-2 col-md-2 col-sm-3 col-md-offset-1 ">
@@ -85,7 +88,6 @@
 	</div>
   </div>
 </div>
-
 <div ng-view></div>
 
 	

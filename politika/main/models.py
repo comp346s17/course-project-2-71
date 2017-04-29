@@ -7,7 +7,7 @@ import datetime
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 
-
+# https://thinkster.io/django-angularjs-tutorial#registering-new-users
 class OurUserManager(BaseUserManager):
 	use_in_migrations = True
 	def create_user(self, username, password=None, **kwargs):

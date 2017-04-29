@@ -2,6 +2,7 @@ from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 from main.models import OurUser
 
+# https://thinkster.io/django-angularjs-tutorial#registering-new-users
 class OurUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
     confirm_password = serializers.CharField(write_only=True, required=False)

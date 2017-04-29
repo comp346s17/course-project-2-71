@@ -59,3 +59,7 @@ hmtl{
 	color: rgb(255,0,0);
 	font-style: italic;
 }
+
+.noResults{
+	padding-top: 20px;
+}
