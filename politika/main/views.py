@@ -3,11 +3,6 @@ from models import OurUser, Event, Comment, junctionEventUser
 from django.http import JsonResponse
 import json
 import datetime
-from rest_framework import permissions, viewsets
-from authentication.permissions import IsAccountOwner
-from main.serializers import OurUserSerializer
-
-from forms import SignUpForm
 from search import get_query
 
 def index(request):
@@ -59,7 +54,7 @@ def eventsApi(request, eventId=None):
 			myimage = params.get('image', "/static/main/img/eventImage.png")
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
-			myorganizer = OurUser.objects.get(id=params.get('organizer'))
+			myorganizer = OurUser.objects.get(id=1)
 			mygoing = 0
 			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
@@ -143,11 +138,11 @@ def commentsApi(request, eventId, commentId=None):
 			pass
 			
 
-def usersApi(request, username = None):
-	if username :
-		user = User.objects.get(username=username)
+def usersApi(request, userId = None):
+	if (userId != None):
+		user = OurUser.objects.get(id=userId)
 		if request.method == 'GET':
-			allEvents = user.ouruser.event_set.all()
+			allEvents = OurUser.event_set.all()
 			events_org = allEvents.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
 			events_go = user.event_set.all()
@@ -159,41 +154,19 @@ def usersApi(request, username = None):
 				return JsonResponse(user.to_json())
 	if request.method == 'POST':
 		params = json.loads(request.body)
-		# if params.get(password1) and params.get(password2) and  check password mathc?
-		user = User.objects.create_user(params.get(username), params.get(password1))
-		user = OurUser(
-			username = params.get(username),
-			first_name = params.get(first_name, 'Anonymous'),
-			last_name = params.get(last_name, ''),
-			profile_pic = params.get(profile_pic, ''),
-			about = params.get(about, ''))
-		user.save()
-		return JsonResponse(user.to_json())		
-
-# https://thinkster.io/django-angularjs-tutorial#registering-new-users
-class OurUserViewSet(viewsets.ModelViewSet):
-	lookup_field = 'username'
-	queryset = OurUser.objects.all()
-	serializer_class = OurUserSerializer
-
-	def get_permissions(self):
-		if self.request.method in permissions.SAFE_METHODS:
-			return (permissions.AllowAny(),)
-
-		if self.request.method == 'POST':
-			return (permissions.AllowAny(),)
-
-		return (permissions.IsAuthenticated(), IsAccountOwner(),)
-
-	def create(self, request):
-		serializer = self.serializer_class(data=request.data)
-
-		if serializer.is_valid():
-			OurUser.objects.create_user(**serializer.validated_data)
-
-			return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
-
-		return Response({
-			'status': 'Bad request',
-			'message': 'Account could not be created with received data.'
-		}, status=status.HTTP_400_BAD_REQUEST)
+		if OurUser.objects.filter(username=params.get('username')).exists():
+			return JsonResponse({'message': "Inputs invalid", 'error': "Username already exists"});
+		if params.get('password1') and params.get('password2') and  params.get('password1')== params.get('password2'):
+			user = OurUser.objects.create_user(
+				username = params.get('username'),
+				password = params.get('password1'),
+				first_name = params.get('first_name', 'Anonymous'),
+				last_name = params.get('last_name', ''),
+				profile_pic = params.get('profile_pic', ''),
+				about = params.get('about', ''))
+			user.save()
+			user = authenticate(username= params.get('username'), password=params.get('password1'))
+			login(request, user)
+			return JsonResponse({'message': "Success! You are now logged in", 'account_info': user.to_json()})
+		else:
+			return JsonResponse({'message': "Inputs invalid", 'error': "Passwords don't match"});	

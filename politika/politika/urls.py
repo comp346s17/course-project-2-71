@@ -19,22 +19,16 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from main import views
-from rest_framework_nested import routers
-from main.views import OurUserViewSet 
 
-router = routers.SimpleRouter()
-router.register(r'users', OurUserViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^api/events/$', views.eventsApi),
-	url(r'^api/events/(?P<eventId>[0-9]+)$', views.eventsApi),
+	url(r'^api/events/(?P<eventId>[0-9]+)/$', views.eventsApi),
 	url(r'^api/comments/(?P<eventId>[0-9]+)/$', views.commentsApi),
-	url(r'^api/comments/(?P<eventId>[0-9]+)/(?P<commentId>[0-9]+)$', views.commentsApi),
-	url(r'^api/users/$', views.eventsApi),
-    url(r'^api/users/(?P<username>[\w\-]+)$/', views.usersApi),
-    url(r'^api/v1/', include(router.urls)),
-    url(r'^$', views.index), #these two the same???
-    url('^.*$', IndexView.as_view(), name='index'),
+	url(r'^api/comments/(?P<eventId>[0-9]+)/(?P<commentId>[0-9]+)/$', views.commentsApi),
+    url(r'^api/users/$', views.usersApi),
+    url(r'^api/users/(?P<userId>[0-9]+)/$', views.usersApi),
+    url(r'^$', views.index),
 	url(r'^api/search/?$', views.search, name = 'search_view'),
 ]

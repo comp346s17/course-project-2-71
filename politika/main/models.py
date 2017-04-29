@@ -55,14 +55,14 @@ class OurUser(AbstractBaseUser, PermissionsMixin):
 	def get_short_name(self):
 		return self.first_name
 
-	# def to_json(self):
-	# 	return {
-	# 	  'id': self.id,
-	# 	  'first_name': self.first_name,
-	# 	  'last_name': self.last_name,
-	# 	  'profile_pic': self.profile_pic,
-	# 	  'about': self.about
-	# 	}
+	def to_json(self):
+		return {
+		  'id': self.id,
+		  'first_name': self.first_name,
+		  'last_name': self.last_name,
+		  'profile_pic': self.profile_pic,
+		  'about': self.about
+		}
 
 
 class Event(models.Model):

@@ -1,5 +1,10 @@
 var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
 
+myApp.service('userService', function($resource){
+	return $resource('/api/users/:id', {}, {
+		'update': {method: 'PUT'}
+	});
+});
 
 myApp.controller('myCtrl', function($scope, $rootScope) {
    
@@ -66,9 +71,9 @@ myApp.component('newEventForm', {
 				var myendTime = $('#endTime').val()
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
-				console.log(mystartTime)
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
 				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, function(resp) {
+				console.log("event created!")
 				// executed on successful response
 			});
 			
@@ -137,11 +142,20 @@ myApp.component('eventDetail', {
 myApp.component('signUp', {
 	templateUrl: '/static/main/signup.template.html',
 	controller: function($scope, userService){
-		$scope.validate = function(){
-
+		$scope.register = function(){
+			userService.save({
+				username : $scope.username,
+				password1 : $scope.password1,
+				password2 : $scope.password2,
+				first_name : $scope.first_name,
+				last_name : $scope.last_name,
+				profile_pic : $scope.profile_pic,
+				about : $scope.about
+			}, function(resp){
+				console.log("registered!!!")
+				$scope.resp = resp
+			});
 		}
-		//when I click on sign up button, I'm sending a get request to userApi, I'll get a form back
-		//when I click submit on the sign up form, I'm sending a post request to userApi
 	}
 });
 
@@ -171,10 +185,11 @@ myApp.component('advSearch', {
 	}
 });
 
-myApp.config(function($routeProvider, $httpProvider, $resourceProvider) {
+myApp.config(function($routeProvider, $httpProvider, $resourceProvider, $qProvider) {
 	$httpProvider.defaults.xsrfCookieName = 'csrftoken';
 	$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
+    $qProvider.errorOnUnhandledRejections(false);
 
 	$routeProvider.
 	   when('/', {
