@@ -162,6 +162,16 @@ myApp.component('eventDetail', {
 myApp.component('signUp', {
 	templateUrl: '/static/main/signup.template.html',
 	controller: function($scope, userService, AuthService){
+		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+			$scope.isLoggedIn = isLoggedIn;
+			$scope.signupForm.$setPristine();
+			$scope.signupForm.$setUntouched();
+			$scope.username = "";
+			$scope.password1='';
+			$scope.password2='';
+			$scope.profile_pic='';
+			$scope.about='';
+		});
 		$scope.register = function(){
 			userService.save({
 				form: 'signup',
@@ -175,6 +185,7 @@ myApp.component('signUp', {
 			}, function(resp){
 				$scope.resp = resp;
 				AuthService.login(resp.user);
+				console.log(resp.user);
 			});
 		};
 
@@ -192,11 +203,15 @@ myApp.component('logIn', {
 			}, function(resp){
 				$scope.resp = resp;
 				AuthService.login(resp.user);
-				console.log(AuthService.currentUser());
+				$scope.loginForm.$setPristine();
+				$scope.loginForm.$setUntouched();
+				$scope.username="";
+				$scope.password="";
 			});
 		};
 	}
 });
+
 
 myApp.controller('logoutCtrl', function($scope, userService, AuthService){
 	$scope.logout = function(){
@@ -213,6 +228,12 @@ myApp.component('userProfile', {
 	controller: function($scope, userService, $routeParams, AuthService){
 		userService.get({id: AuthService.currentUser().id}, function(resp){
 			$scope.user = resp.user;
+			if($scope.user.first_name === null){
+				$scope.user.first_name = 'Anonymous'
+			}
+			if($scope.user.profile_pic === null){
+				$scope.user.profile_pic = '/static/main/img/user-profile.png'
+			}
 			$scope.events_org = resp.events_org;
 			$scope.events_go = resp.events_go;
 		})
@@ -227,6 +248,9 @@ myApp.component('userProfile', {
 			}, function(resp) {
 				$scope.resp = resp;
 				$scope.user = resp.user;
+				$scope.editProfileForm.$setPristine();
+				$scope.editProfileForm.$setUntouched();
+				$scope.currentRecord={};
 			});
 		}
 	}
