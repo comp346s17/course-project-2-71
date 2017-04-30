@@ -16,7 +16,11 @@ class OurUserManager(BaseUserManager):
 			raise ValueError('Users must have valid username')
 
 		ouruser = self.model(
-			username= username
+			username= username,
+			first_name=kwargs.get('first_name'),
+			last_name=kwargs.get('last_name'),
+			profile_pic=kwargs.get('profile_pic'),
+			about=kwargs.get('about')
 		)
 
 		ouruser.set_password(password)

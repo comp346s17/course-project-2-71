@@ -84,7 +84,9 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 		if(AuthService.isLoggedIn()){
 			$scope.link = '#!/new-event';
 		}else{
-			alert("Please log in or sign up to add new events!");
+			$scope.target = '#alertModal';
+			$scope.alertMsg = "Please log in or sign up to add new events!";
+			console.log($scope.target)
 		}
 	}
 })
@@ -100,8 +102,20 @@ myApp.component('newEventForm', {
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, function(resp) {
-				console.log("event created!")
+				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, 
+				function(resp) {
+					$scope.newEventForm.$setPristine();
+					$scope.newEventForm.$setUntouched();
+					$scope.name = "";
+					$scope.detail='';
+					$scope.date='';
+					$scope.startTime='';
+					$scope.endTime='';
+					$scope.streetnumber='';
+					$scope.streetname='';
+					$scope.zip='';
+					$scope.city='';
+					$scope.image='';
 				// executed on successful response
 			});
 			
@@ -209,6 +223,7 @@ myApp.component('signUp', {
 			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
 		});
 		$scope.register = function(){
+			console.log("ABOUT???!",$scope.about);
 			userService.save({
 				form: 'signup',
 				username : $scope.username,
@@ -217,9 +232,10 @@ myApp.component('signUp', {
 				first_name : $scope.first_name,
 				last_name : $scope.last_name,
 				profile_pic : $scope.profile_pic,
-				about : $scope.about
+				about : $scope.about,
 			}, function(resp){
 				$scope.resp = resp;
+				console.log("NEW USER", resp);
 				AuthService.login(resp.user);
 			});
 		};
@@ -267,7 +283,7 @@ myApp.controller('logoutCtrl', function($scope, userService, AuthService){
 
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
-	controller: function($scope, userService, $routeParams, AuthService){
+	controller: function($scope, userService, $routeParams, AuthService, $rootScope, $location){
 		userService.get({id: $routeParams.userId}, function(resp){
 			$scope.user = resp.user;
 			if($scope.user.first_name === null){
@@ -289,7 +305,7 @@ myApp.component('userProfile', {
 
 		$scope.editProfile = function(){
 			userService.update({
-				id : $scope.user.id},
+				id : AuthService.currentUser().id},
 				{first_name: $scope.first_name,
 				last_name: $scope.last_name,
 				about: $scope.about,
@@ -297,10 +313,19 @@ myApp.component('userProfile', {
 			}, function(resp) {
 				$scope.resp = resp;
 				$scope.user = resp.user;
+				console.log($scope.user);
 				$scope.editProfileForm.$setPristine();
 				$scope.editProfileForm.$setUntouched();
-				$scope.currentRecord={};
+				$scope.about='';
 			});
+		}
+
+		$scope.deleteProfile = function(){
+			userService.delete({id: AuthService.currentUser().id},
+				function(resp) {
+					AuthService.logout();
+					$location.path('/');
+				})
 		}
 	}
 });

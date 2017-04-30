@@ -86,7 +86,19 @@
     <div class="col-lg-3 col-md-3 col-sm-3" ng-controller='newEventCtrl'>
     	<div class="btn-group" role="group">
     	{% verbatim %}
-    	<a class="btn btn-default" style="background-color: #e65c00" ng-href="{{link}}" ng-click="checkPermission()">Add New Event</a>
+    	<a class="btn btn-default" style="background-color: #e65c00" ng-href="{{link}}" data-target="{{target}}" data-toggle='modal' ng-click="checkPermission()">Add New Event</a>
+
+    	<div id="alertModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content container-fluid">
+			      
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4>{{alertMsg}}</h4>
+			      </div>
+			</div>
+			</div>
+		</div>
 	    {% endverbatim %}
 	    </div>
 	</div>
@@ -94,8 +106,6 @@
 </div>
 
 <div ng-view></div>
-
-	
 
 	<script type="text/javascript" src="/static/main/scripts/validation.js"></script>
 </body>

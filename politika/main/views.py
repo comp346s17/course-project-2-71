@@ -152,6 +152,7 @@ def usersApi(request, userId = None):
 			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
 		if request.method == 'DELETE':
 			if (request.user == user):
+				logout(request)
 				user.delete()
 				return JsonResponse(user.to_json())
 		if request.method == 'PUT':
@@ -182,10 +183,10 @@ def usersApi(request, userId = None):
 				user = OurUser.objects.create_user(
 					username = params.get('username'),
 					password = params.get('password1'),
-					first_name = params.get('first_name', 'Anonymous'),
-					last_name = params.get('last_name', ''),
-					profile_pic = params.get('profile_pic', ''),
-					about = params.get('about', ''))
+					first_name = params.get('first_name'),
+					last_name = params.get('last_name'),
+					profile_pic = params.get('profile_pic'),
+					about = params.get('about'))
 				user.save()
 				user = authenticate(username= params.get('username'), password=params.get('password1'))
 				login(request, user)
