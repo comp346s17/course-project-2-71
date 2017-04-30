@@ -5,13 +5,14 @@
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	        <h1>Log In</h1>
+	        <div class="server-resp" ng-show='isLoggedIn'>{{resp.message}}</div>
 	        <div class="error-input">{{resp.error}}</div>
 	      </div>
 	      
 	      <div class="modal-body">		      
 			<div class="container-fluid">
 				<div class="col-sm-6">
-				<form name="loginForm" >
+				<form name="loginForm" id='login-form' ng-submit="login()">
 					<div class="form-group">
 					  <label for="username">Username:</label>
 					  <input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" required/> 
@@ -22,7 +23,8 @@
 					  <input type="password" class="form-control" id="password" ng-model="password" placeholder="Password" required/> 
 					</div>
 
-					<button type="submit" class="btn btn-default" style="margin-top: 10px" ng-click="login()" data-dismiss='modal'>Submit</button>
+					<button type="submit" class="btn btn-default" style="margin-top: 10px" data-dismiss={{modal}}>Submit</button>
+
 				</form>
 				</div>
 			</div>
