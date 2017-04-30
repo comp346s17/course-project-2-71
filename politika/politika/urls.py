@@ -24,11 +24,11 @@ from main import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^api/events/$', views.eventsApi),
-	url(r'^api/events/(?P<eventId>[0-9]+)/$', views.eventsApi),
+	url(r'^api/events/(?P<eventId>[0-9]+)$', views.eventsApi),
 	url(r'^api/comments/(?P<eventId>[0-9]+)/$', views.commentsApi),
 	url(r'^api/comments/(?P<eventId>[0-9]+)/(?P<commentId>[0-9]+)/$', views.commentsApi),
     url(r'^api/users/$', views.usersApi),
-    url(r'^api/users/(?P<userId>[0-9]+)/$', views.usersApi),
+    url(r'^api/users/(?P<userId>[0-9]+)$', views.usersApi),
     url(r'^$', views.index),
 	url(r'^api/search/?$', views.search, name = 'search_view'),
 ]

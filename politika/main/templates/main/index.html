@@ -47,9 +47,8 @@
 	     <a class="navbar-brand" href="#" style="font-family: Rubik Mono One; font-size: 33px"><span style="font-size: 41px">P</span>olitiká</a>
 
 	    </div>
-
 	    <ul class="nav navbar-nav navbar-right collapse navbar-collapse" id="login-btns">
-	      <li ng-show="isLoggedIn"><a href="#!/user-profile"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
+	      <li ng-show="isLoggedIn"><a ng-href="#!/user-profile"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
 	      <li ng-show="isLoggedIn"><a href="#" ng-controller="logoutCtrl" ng-click="logout()" ></span>Log out</a></li>
   	      <li  ng-show="isNotLoggedIn"><a href="#" data-target="#signupModal" data-toggle="modal">Sign Up</a></li>
 	      <li ng-show="isNotLoggedIn"><a href="#" data-target="#loginModal" data-toggle="modal" >Login</a></li>

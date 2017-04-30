@@ -140,11 +140,10 @@ def commentsApi(request, eventId, commentId=None):
 			
 
 def usersApi(request, userId = None):
-	if (userId != None):
+	if userId:
 		user = OurUser.objects.get(id=userId)
 		if request.method == 'GET':
-			allEvents = OurUser.event_set.all()
-			events_org = allEvents.filter(organizer=user)
+			events_org = Event.objects.filter(organizer=user)
 			events_org_json = [e.to_json() for e in events_org]
 			events_go = user.event_set.all()
 			events_go_json = [e.to_json() for e in events_go]
@@ -153,6 +152,14 @@ def usersApi(request, userId = None):
 			if (request.user == user):
 				user.delete()
 				return JsonResponse(user.to_json())
+		if request.method == 'PUT':
+			params = json.loads(request.body)
+			user.first_name = params.get('first_name', user.first_name)
+			user.last_name = params.get('last_name', user.last_name)
+			user.profile_pic = params.get('profile_pic', user.profile_pic)
+			user.about = params.get('about', user.about)
+			user.save()
+			return JsonResponse({'message': 'Profile updated!', 'user': user.to_json()})
 	if request.method == 'POST':
 		params = json.loads(request.body)
 		if params.get('action') == 'logout':

@@ -18,7 +18,7 @@ myApp.factory('AuthService', function() {
 });
 
 myApp.controller('myCtrl', function($scope, $rootScope, AuthService) {
-   
+
 	$scope.submitQuery = function(){
 		$rootScope.query = $scope.query
 		console.log($rootScope.query)
@@ -27,6 +27,7 @@ myApp.controller('myCtrl', function($scope, $rootScope, AuthService) {
 	}
 
 	$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+		console.log("update logged in and current user variable in scope")
 		$scope.isLoggedIn = isLoggedIn;
 		$scope.isNotLoggedIn = !isLoggedIn;
 		$scope.currentUser = AuthService.currentUser();
@@ -191,6 +192,7 @@ myApp.component('logIn', {
 			}, function(resp){
 				$scope.resp = resp;
 				AuthService.login(resp.user);
+				console.log(AuthService.currentUser());
 			});
 		};
 	}
@@ -198,11 +200,9 @@ myApp.component('logIn', {
 
 myApp.controller('logoutCtrl', function($scope, userService, AuthService){
 	$scope.logout = function(){
-		
 		userService.save({
 			action: 'logout'
 		}, function(resp){
-			console.log('logout success!!!')
 			AuthService.logout();
 		})
 	}
@@ -210,12 +210,25 @@ myApp.controller('logoutCtrl', function($scope, userService, AuthService){
 
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
-	controller: function($scope, userService, $routeParams){
-		userService.get({id: $routeParams.userId}, function(resp){
+	controller: function($scope, userService, $routeParams, AuthService){
+		userService.get({id: AuthService.currentUser().id}, function(resp){
 			$scope.user = resp.user;
 			$scope.events_org = resp.events_org;
 			$scope.events_go = resp.events_go;
 		})
+
+		$scope.editProfile = function(){
+			userService.update({
+				id : $scope.user.id},
+				{first_name: $scope.first_name,
+				last_name: $scope.last_name,
+				about: $scope.about,
+				profile_pic: $scope.profile_pic
+			}, function(resp) {
+				$scope.resp = resp;
+				$scope.user = resp.user;
+			});
+		}
 	}
 });
 
@@ -239,7 +252,7 @@ myApp.config(function($routeProvider, $httpProvider, $resourceProvider, $qProvid
 	   when('/event/:eventId', {
 			template: '<event-detail></event-detail>'
 	   }).
-	   when('/user-profile/:userId', {
+	   when('/user-profile', {
 			template: '<user-profile></user-profile>'
 	   }).
 	   when('/new-event', {

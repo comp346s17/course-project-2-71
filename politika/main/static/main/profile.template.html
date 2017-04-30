@@ -11,6 +11,8 @@
 			<p><b>About</b></p>
 			<p>{{user.about}}</p><br></br>
 
+			<a style="margin: 30px 0px 30px 0px" data-toggle="modal" data-target="#editProfileModal" class="btn btn-default">Edit profile</a>
+
 			<ul class="nav nav-tabs" data-tabs="tabs">
 			  <li class="active"><a data-toggle="tab" data-target="#organize">Events I organize</a></li>
 			  <li><a data-toggle="tab" data-target="#going">Events I'm going to</a></li>
@@ -35,5 +37,52 @@
 			  </div>
 			</div> 	
 		</div>
+
+
+<div id="editProfileModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h1>Edit Profile</h1>
+			<div class="server-resp">{{resp.message}}</div>
+	      </div>
+
+	      <div class="modal-body">
+	      		<div class="container-fluid">
+					<div class="col-sm-6">
+						<form id="edit-profile-form" ng-submit="editProfile()">
+
+							<div class="form-group">
+								<label for="first_name">First name:</label>
+								<input type="text" class="form-control" id="first_name" ng-model="first_name" placeholder="eg. Phuc"/>
+							</div>
+
+							<div class="form-group">
+								<label for="last_name">Last name:</label>
+								<input type="text" class="form-control" id="last_name" ng-model="last_name" placeholder="eg. Nguyen"/>				
+							</div>
+
+							<div class="form-group">
+								<label for="profile_pic">Profile Picture:</label>
+								<input type="text" class="form-control" id="profile_pic" ng-model="profile_pic" placeholder="eg: url http://myprofilepic"/>				
+							</div>
+
+							<div class="form-group">
+								<label for="about">About:</label>
+								<input type="text" class="form-control" id="about" ng-model="about" placeholder="tell others a little bit about you"/>				
+							</div>
+
+							<button type="submit" class="btn btn-default" style="margin-top: 10px">Submit</button>
+						</form>
+					</div>
+
+				</div>
+		      </div>
+		</div>
+	</div>
+</div>
+
 </div>
 </div>
