@@ -6,7 +6,18 @@ myApp.service('userService', function($resource){
 	});
 });
 
-myApp.controller('myCtrl', function($scope, $rootScope) {
+myApp.factory('AuthService', function() {
+  var currentUser;
+
+  return {
+    login: function(user) {currentUser = user},
+    logout: function() {currentUser = null},
+    isLoggedIn: function() {return (currentUser) ? true : false; },
+    currentUser: function() { return currentUser; }
+  };
+});
+
+myApp.controller('myCtrl', function($scope, $rootScope, AuthService) {
    
 	$scope.submitQuery = function(){
 		$rootScope.query = $scope.query
@@ -14,6 +25,13 @@ myApp.controller('myCtrl', function($scope, $rootScope) {
 		console.log($scope.query)
 		console.log('gethere')
 	}
+
+	$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+		$scope.isLoggedIn = isLoggedIn;
+		$scope.isNotLoggedIn = !isLoggedIn;
+		$scope.currentUser = AuthService.currentUser();
+	});
+
 });
 
 myApp.service('eventsService', function($resource) {
@@ -139,11 +157,13 @@ myApp.component('eventDetail', {
 	}
 });
 
+
 myApp.component('signUp', {
 	templateUrl: '/static/main/signup.template.html',
-	controller: function($scope, userService){
+	controller: function($scope, userService, AuthService){
 		$scope.register = function(){
 			userService.save({
+				form: 'signup',
 				username : $scope.username,
 				password1 : $scope.password1,
 				password2 : $scope.password2,
@@ -152,20 +172,41 @@ myApp.component('signUp', {
 				profile_pic : $scope.profile_pic,
 				about : $scope.about
 			}, function(resp){
-				console.log("registered!!!")
-				$scope.resp = resp
+				$scope.resp = resp;
+				AuthService.login(resp.user);
 			});
-		}
+		};
+
 	}
 });
 
 myApp.component('logIn', {
 	templateUrl: '/static/main/login.template.html',
-	controller: function($scope){
-		//nothing here yet
+	controller: function($scope, userService, AuthService){
+		$scope.login = function(){
+			userService.save({
+				form: 'login',
+				username : $scope.username,
+				password : $scope.password,
+			}, function(resp){
+				$scope.resp = resp;
+				AuthService.login(resp.user);
+			});
+		};
 	}
 });
 
+myApp.controller('logoutCtrl', function($scope, userService, AuthService){
+	$scope.logout = function(){
+		
+		userService.save({
+			action: 'logout'
+		}, function(resp){
+			console.log('logout success!!!')
+			AuthService.logout();
+		})
+	}
+})
 
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 import datetime
 from search import get_query
+from django.contrib.auth import logout, authenticate, login
 
 def index(request):
 	return render(request,'main/index.html')
@@ -154,19 +155,30 @@ def usersApi(request, userId = None):
 				return JsonResponse(user.to_json())
 	if request.method == 'POST':
 		params = json.loads(request.body)
-		if OurUser.objects.filter(username=params.get('username')).exists():
-			return JsonResponse({'message': "Inputs invalid", 'error': "Username already exists"});
-		if params.get('password1') and params.get('password2') and  params.get('password1')== params.get('password2'):
-			user = OurUser.objects.create_user(
-				username = params.get('username'),
-				password = params.get('password1'),
-				first_name = params.get('first_name', 'Anonymous'),
-				last_name = params.get('last_name', ''),
-				profile_pic = params.get('profile_pic', ''),
-				about = params.get('about', ''))
-			user.save()
-			user = authenticate(username= params.get('username'), password=params.get('password1'))
-			login(request, user)
-			return JsonResponse({'message': "Success! You are now logged in", 'account_info': user.to_json()})
-		else:
-			return JsonResponse({'message': "Inputs invalid", 'error': "Passwords don't match"});	
+		if params.get('action') == 'logout':
+			logout(request)
+			return render(request,'main/index.html')
+		if params.get('form') == 'login':
+			user = authenticate(username= params.get('username'), password=params.get('password'))
+			if user:
+				login(request, user)
+				return JsonResponse({'message': 'Successfully logged in!', 'user': user.to_json()})
+			else:
+				return JsonResponse({'error': "Wrong username or password."})
+		if params.get('form') == 'signup':
+			if OurUser.objects.filter(username=params.get('username')).exists():
+				return JsonResponse({'message': "Inputs invalid", 'error': "Username already exists"});
+			if params.get('password1') and params.get('password2') and  params.get('password1')== params.get('password2'):
+				user = OurUser.objects.create_user(
+					username = params.get('username'),
+					password = params.get('password1'),
+					first_name = params.get('first_name', 'Anonymous'),
+					last_name = params.get('last_name', ''),
+					profile_pic = params.get('profile_pic', ''),
+					about = params.get('about', ''))
+				user.save()
+				user = authenticate(username= params.get('username'), password=params.get('password1'))
+				login(request, user)
+				return JsonResponse({'message': "Successfully created an account!", 'user': user.to_json()})
+			else:
+				return JsonResponse({'message': "Inputs invalid", 'error': "Passwords don't match"});	
