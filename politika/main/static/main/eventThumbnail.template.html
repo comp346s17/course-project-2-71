@@ -32,10 +32,14 @@
 				<span class = "event-detail text-center">Organizer: <a href = '#!/user-profile/{{event.organizer.id}}'> {{event.organizer.first_name}} {{event.organizer.last_name}}</a></span> 
 			</div>
 			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
-				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>
-				<button type="button" class="btn btn-default" name = "going">I'm Going!</button>
+				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail"> {{event.going}} Going </span> <br></br>  <br></br>
+
+				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#alertModal" ng-click="going({event})" name = "going">I'm Going!</button>
+			</div>
 			</div>
 		</div>
+
 	</div>
 	
 </div>
+
