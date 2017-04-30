@@ -92,7 +92,7 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
-	controller: function($scope, eventsService){
+	controller: function($scope, eventsService, AuthService){
 			$scope.submitEvent = function(){
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
@@ -100,7 +100,7 @@ myApp.component('newEventForm', {
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, function(resp) {
+				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }, function(resp) {
 				console.log("event created!")
 				// executed on successful response
 			});
@@ -124,8 +124,10 @@ myApp.component('eventDetail', {
 		});
 
 		var loggedInUserId;
+		console.log(AuthService.currentUser())
 		if(AuthService.currentUser()){
 			loggedInUserId = AuthService.currentUser().id;
+			console.log(AuthService.currentUser())
 		}
 
 		$scope.checkPermission = function(){
