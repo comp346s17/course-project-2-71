@@ -11,7 +11,7 @@
 			<p><b>About</b></p>
 			<p>{{user.about}}</p><br></br>
 
-			<a style="margin: 30px 0px 30px 0px" data-toggle="modal" data-target="#editProfileModal" class="btn btn-default">Edit profile</a>
+			<a style="margin: 30px 0px 30px 0px" data-toggle="modal" data-target="#editProfileModal" class="btn btn-default" ng-show='isAuthorized'>Edit profile</a>
 
 			<ul class="nav nav-tabs" data-tabs="tabs">
 			  <li class="active"><a data-toggle="tab" data-target="#organize">Events I organize</a></li>

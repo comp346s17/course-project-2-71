@@ -12,7 +12,7 @@
 			</div>
 			<div class = "col-md-2 col-md-offset-2  col-sm-offset-1  event-thumbnail-col event-detail-col">
 				<img src = "/static/main/img/group-going.png" alt = "group"></img><span class = "event-detail">  {{event.going}} Going </span> <br></br>  <br></br>
-				<button type="button" class="btn btn-default" ng-click = "going()" name = "going">I'm Going!</button>
+				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#alertModal" ng-click ="going()" name = "going">I'm Going!</button>
 			</div>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 						<b> Media:</b>
 					</div>
 					<div class = "col-md-2 col-md-offset-6 event-thumbnail-col">
-						<a href="" data-target="#addImageModal" data-toggle="modal" class="btn btn-default">Add image</a>
+						<a href="" data-target="{{targetMedia}}" data-toggle="modal" class="btn btn-default" ng-click='checkPermission()'>Add image</a>
 					</div>
 				</div>	
 				<div class = "col-md-9 col-md-offset-2 event-thumbnail-col">					
@@ -70,7 +70,7 @@
 					<b> Comments:</b>
 				</div>
 				<div class = "col-md-2 col-md-offset-6 event-thumbnail-col">
-					<a href="" data-target="#addCommentModal" data-toggle="modal" class="btn btn-default">Add comment</a>
+					<a href="" data-target="{{targetComment}}" data-toggle="modal" ng-click='checkPermission()' class="btn btn-default">Add comment</a>
 				</div>
 			</div>
 			<div class = "row" ng-repeat = "comment in comments" >
@@ -168,4 +168,18 @@
 	</div>
 	</div>
 	</div>
-</div>	
+</div>
+
+<div id="alertModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content container-fluid">
+	      
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4>{{alertMsg}}</h4>
+	      </div>
+	</div>
+	</div>
+</div>
+
+

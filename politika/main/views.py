@@ -55,19 +55,18 @@ def eventsApi(request, eventId=None):
 			myimage = params.get('image', "/static/main/img/eventImage.png")
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
-			myorganizer = OurUser.objects.get(id=1)
+			myorganizer = request.user
 			mygoing = 0
 			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
-
 			myMediaList = "[]"
 
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
 			event.save()
-			return redirect("/")
+			return redirect('/')
 	else:
 		if(request.method == 'GET'):
 			event = Event.objects.get(id = eventId)
@@ -82,7 +81,10 @@ def eventsApi(request, eventId=None):
 			event.image = params.get('image', event.image)
 			event.title = params.get('title', event.title)
 			event.location = params.get('location', event.location)
-			event.going = params.get('going', event.going)
+			if params.get('going') and not event.attendees.filter(id=request.user.id).exists():
+				event.going = params.get('going')
+				junc = junctionEventUser(userId=request.user, eventId=event)
+				junc.save()
 
 			tempDate = params.get('date', '')
 			if tempDate != '':
@@ -106,9 +108,9 @@ def eventsApi(request, eventId=None):
 				tempMediaList = json.loads(tempMediaList)
 				currentMediaList.append(tempMediaList)
 				event.media_list = json.dumps(currentMediaList)
-				
+
 			event.save()
-			return redirect("/")
+			return JsonResponse(event.to_json())
 
 
 def commentsApi(request, eventId, commentId=None):
@@ -160,6 +162,7 @@ def usersApi(request, userId = None):
 			user.about = params.get('about', user.about)
 			user.save()
 			return JsonResponse({'message': 'Profile updated!', 'user': user.to_json()})
+	
 	if request.method == 'POST':
 		params = json.loads(request.body)
 		if params.get('action') == 'logout':

@@ -47,12 +47,14 @@
 	     <a class="navbar-brand" href="#" style="font-family: Rubik Mono One; font-size: 33px"><span style="font-size: 41px">P</span>olitiká</a>
 
 	    </div>
+	    {% verbatim %}
 	    <ul class="nav navbar-nav navbar-right collapse navbar-collapse" id="login-btns">
-	      <li ng-show="isLoggedIn"><a ng-href="#!/user-profile"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
+	      <li ng-show="isLoggedIn"><a ng-href="#!/user-profile/{{currentUser.id}}"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
 	      <li ng-show="isLoggedIn"><a href="#" ng-controller="logoutCtrl" ng-click="logout()" ></span>Log out</a></li>
   	      <li  ng-show="isNotLoggedIn"><a href="#" data-target="#signupModal" data-toggle="modal">Sign Up</a></li>
 	      <li ng-show="isNotLoggedIn"><a href="#" data-target="#loginModal" data-toggle="modal">Login</a></li>
 	    </ul>
+	    {% endverbatim %}
 
 	    <sign-up></sign-up>
 	    <log-in></log-in>
@@ -81,13 +83,16 @@
 		  <adv-search></adv-search>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-3">
+    <div class="col-lg-3 col-md-3 col-sm-3" ng-controller='newEventCtrl'>
     	<div class="btn-group" role="group">
-    	<a class="btn btn-default" style="background-color: #e65c00" href="#!/new-event">Add New Event</a>
+    	{% verbatim %}
+    	<a class="btn btn-default" style="background-color: #e65c00" ng-href="{{link}}" ng-click="checkPermission()">Add New Event</a>
+	    {% endverbatim %}
 	    </div>
 	</div>
   </div>
 </div>
+
 <div ng-view></div>
 
 	
