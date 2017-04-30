@@ -117,6 +117,7 @@ myApp.component('eventDetail', {
 	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService) {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
+			console.log('========>>>>',$scope.event);
 		});
 		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
@@ -161,7 +162,7 @@ myApp.component('eventDetail', {
 						if ($scope.event.going == resp.going){
 							$scope.alertMsg = "You are already going to this event!"
 						}else{
-							$scope.alertMsg = "Event added to your event list. See you there!"
+				 			$scope.alertMsg = "Event added to your event list. See you there!"
 						}
 						$scope.event = resp;
 					});
@@ -205,6 +206,7 @@ myApp.component('signUp', {
 			$scope.password2='';
 			$scope.profile_pic='';
 			$scope.about='';
+			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
 		});
 		$scope.register = function(){
 			userService.save({
@@ -219,7 +221,6 @@ myApp.component('signUp', {
 			}, function(resp){
 				$scope.resp = resp;
 				AuthService.login(resp.user);
-				console.log(resp.user);
 			});
 		};
 
@@ -229,6 +230,16 @@ myApp.component('signUp', {
 myApp.component('logIn', {
 	templateUrl: '/static/main/login.template.html',
 	controller: function($scope, userService, AuthService){
+
+		$scope.$watch(AuthService.isLoggedIn, function (isLoggedIn) {
+			$scope.isLoggedIn = isLoggedIn;
+			$scope.loginForm.$setPristine();
+			$scope.loginForm.$setUntouched();
+			$scope.username="";
+			$scope.password="";
+			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
+		});
+
 		$scope.login = function(){
 			userService.save({
 				form: 'login',
@@ -237,10 +248,7 @@ myApp.component('logIn', {
 			}, function(resp){
 				$scope.resp = resp;
 				AuthService.login(resp.user);
-				$scope.loginForm.$setPristine();
-				$scope.loginForm.$setUntouched();
-				$scope.username="";
-				$scope.password="";
+				
 			});
 		};
 	}
@@ -273,8 +281,10 @@ myApp.component('userProfile', {
 		})
 
 		$scope.isAuthorized = false;
-		if($routeParams.userId == AuthService.currentUser().id){
-			$scope.isAuthorized = true;
+		if(AuthService.isLoggedIn()){
+			if( $routeParams.userId == AuthService.currentUser().id){
+				$scope.isAuthorized = true;
+			}
 		}
 
 		$scope.editProfile = function(){

@@ -11,24 +11,22 @@
 			<p><b>About</b></p>
 			<p>{{user.about}}</p><br></br>
 
-			<a style="margin: 30px 0px 30px 0px" data-toggle="modal" data-target="#editProfileModal" class="btn btn-default" ng-show='isAuthorized'>Edit profile</a>
+			<a data-toggle="modal" data-target="#editProfileModal" class="btn btn-default profile-info" ng-show='isAuthorized'>Edit profile</a>
 
 			<ul class="nav nav-tabs" data-tabs="tabs">
 			  <li class="active"><a data-toggle="tab" data-target="#organize">Events I organize</a></li>
 			  <li><a data-toggle="tab" data-target="#going">Events I'm going to</a></li>
 			</ul>
 
-			<div class="tab-content">
+			<div class="tab-content profile-info"> 
 			  <div id="organize" class="tab-pane fade in active">
-			    <h3>Events I organize</h3>
 			    <div ng-repeat = "event in events_org">
-			    <ul>
+			    <ul >
 			    	<li><a href="#!/event/{{event.id}}">{{event.title}}</a></li>
 			    </ul>
 			    </div>
 			  </div>
 			  <div id="going" class="tab-pane fade">
-			    <h3>Events I'm going to</h3>
 			    <div ng-repeat = 'event in events_go'>
 			    <ul>
 			    	<li><a href="#!/event/{{event.id}}">{{event.title}}</a></li>

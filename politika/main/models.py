@@ -32,8 +32,7 @@ class OurUserManager(BaseUserManager):
 
 class OurUser(AbstractBaseUser, PermissionsMixin):
 	username = models.CharField(max_length=40, unique=True)
-	# user = models.OneToOneField(User, on_delete = models.CASCADE, related_name='ouruser')
-	first_name = models.CharField(max_length=40, blank=True, null=True)
+	first_name = models.CharField(max_length=40, default="Anonymous")
 	last_name = models.CharField(max_length=40, blank=True, null=True)
 	profile_pic = models.TextField(blank=True, null=True)
 	about = models.TextField(blank=True, null=True)

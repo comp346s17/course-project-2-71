@@ -13,7 +13,7 @@
 	      <div class="modal-body">
 	      		<div class="container-fluid">
 					<div class="col-sm-6">
-						<form name="signupForm" ng-submit="register()">
+						<form name="signupForm" id='signup-form' ng-submit="register()">
 
 							<div class="form-group">
 							  <label for="username">Username:</label>
@@ -51,7 +51,7 @@
 								<input type="text" class="form-control" id="about" ng-model="about" placeholder="tell others a little bit about you"/>				
 							</div>
 
-							<button type="submit" class="btn btn-default" style="margin-top: 10px">Submit</button>
+							<button type="submit" class="btn btn-default" style="margin-top: 10px" data-dismiss={{modal}}>Submit</button>
 						</form>
 					</div>
 

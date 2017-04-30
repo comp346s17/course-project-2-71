@@ -177,7 +177,7 @@ def usersApi(request, userId = None):
 				return JsonResponse({'error': "Wrong username or password."})
 		if params.get('form') == 'signup':
 			if OurUser.objects.filter(username=params.get('username')).exists():
-				return JsonResponse({'message': "Inputs invalid", 'error': "Username already exists"});
+				return JsonResponse({'error': "Username already exists"});
 			if params.get('password1') and params.get('password2') and  params.get('password1')== params.get('password2'):
 				user = OurUser.objects.create_user(
 					username = params.get('username'),
@@ -191,4 +191,4 @@ def usersApi(request, userId = None):
 				login(request, user)
 				return JsonResponse({'message': "Successfully created an account!", 'user': user.to_json()})
 			else:
-				return JsonResponse({'message': "Inputs invalid", 'error': "Passwords don't match"});	
+				return JsonResponse({'error': "Passwords don't match"});	
