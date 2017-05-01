@@ -126,6 +126,8 @@ def eventsApi(request, eventId=None):
 			event.save()
 			return JsonResponse(event.to_json())
 
+
+
 #api that is responsible for serving the comments to the front end and creating new comments in the database	
 def commentsApi(request, eventId, commentId=None):
 	
@@ -153,22 +155,28 @@ def commentsApi(request, eventId, commentId=None):
 		elif(request.method == 'PUT'): #in the future we can use this to allow users to edit an comment
 			params = json.loads(request.body)
 			pass
-			
+	
 
+
+#api that is responsible for serving the users to the front end and creating new users in the database
 def usersApi(request, userId = None):
-	if userId:
+
+	if userId: 
 		user = OurUser.objects.get(id=userId)
+
 		if request.method == 'GET':
-			events_org = Event.objects.filter(organizer=user)
+			events_org = Event.objects.filter(organizer=user) #get all events current user organizes
 			events_org_json = [e.to_json() for e in events_org]
-			events_go = user.event_set.all()
+			events_go = user.event_set.all() #get all event current user is going to
 			events_go_json = [e.to_json() for e in events_go]
 			return JsonResponse({"user": user.to_json(), "events_org": events_org_json, "events_go": events_go_json})
+		
 		if request.method == 'DELETE':
-			if (request.user == user):
+			if (request.user == user): #check that user is authorized to delete
 				logout(request)
 				user.delete()
 				return JsonResponse(user.to_json())
+		
 		if request.method == 'PUT':
 			params = json.loads(request.body)
 			user.first_name = params.get('first_name', user.first_name)
@@ -178,21 +186,31 @@ def usersApi(request, userId = None):
 			user.save()
 			return JsonResponse({'message': 'Profile updated!', 'user': user.to_json()})
 	
+
+	#when no user id is needed
 	if request.method == 'POST':
 		params = json.loads(request.body)
-		if params.get('action') == 'logout':
+
+		if params.get('action') == 'logout': 
 			logout(request)
 			return render(request,'main/index.html')
-		if params.get('form') == 'login':
-			user = authenticate(username= params.get('username'), password=params.get('password'))
+
+		#if request sent from login form
+		if params.get('form') == 'login':  
+			user = authenticate(username= params.get('username'), password=params.get('password')) 
 			if user:
 				login(request, user)
 				return JsonResponse({'message': 'Successfully logged in!', 'user': user.to_json()})
 			else:
 				return JsonResponse({'error': "Wrong username or password."})
-		if params.get('form') == 'signup':
-			if OurUser.objects.filter(username=params.get('username')).exists():
+		
+		#if request sent from login form 
+		if params.get('form') == 'signup': 
+			#error if username already exists
+			if OurUser.objects.filter(username=params.get('username')).exists(): 
 				return JsonResponse({'error': "Username already exists"});
+			
+			#success if password1 and password2 exist and they match
 			if params.get('password1') and params.get('password2') and  params.get('password1')== params.get('password2'):
 				user = OurUser.objects.create_user(
 					username = params.get('username'),
