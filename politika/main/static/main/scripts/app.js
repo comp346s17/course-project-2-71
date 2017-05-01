@@ -1,11 +1,7 @@
 var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
 
-myApp.service('userService', function($resource){
-	return $resource('/api/users/:id', {}, {
-		'update': {method: 'PUT'}
-	});
-});
-
+// A service that keeps track of the authentication status of user. 
+// Other controllers can use the returning functions to access or change authenticaiton status of user. 
 myApp.factory('AuthService', function() {
   var currentUser;
 
@@ -17,15 +13,17 @@ myApp.factory('AuthService', function() {
   };
 });
 
+
+// The main controller for the root scope
 myApp.controller('myCtrl', function($scope, $rootScope, AuthService, $location) {
 	$scope.currentPage = $location.path()
+
+	//store search query string
 	$scope.submitQuery = function(){
 		$rootScope.query = $scope.query
-		console.log($rootScope.query)
-		console.log($scope.query)
-		console.log('gethere')
 	}
 
+	//update current logged in status and current user everytime the authentication service changes
 	$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
 		$scope.isLoggedIn = isLoggedIn;
 		$scope.isNotLoggedIn = !isLoggedIn;
@@ -34,10 +32,16 @@ myApp.controller('myCtrl', function($scope, $rootScope, AuthService, $location) 
 	 $rootScope.$on('$locationChangeStart', function() {
         $rootScope.previousPage = $scope.currentPage;
 		$scope.currentPage = $location.path();
-		console.log($rootScope.previousPage)
     });
 	
 
+});
+
+
+myApp.service('userService', function($resource){
+	return $resource('/api/users/:id', {}, {
+		'update': {method: 'PUT'}
+	});
 });
 
 myApp.service('eventsService', function($resource) {
@@ -510,6 +514,13 @@ myApp.component('userProfile', {
 		}
 
 		$scope.editProfile = function(){
+			userService.get({id: AuthService.currentUser().id}, function(resp){
+				$scope.editProfileForm.first_name = resp.first_name;
+				$scope.editProfileForm.last_name = resp.last_name;
+				$scope.editProfileForm.about = resp.about;
+				$scope.editProfileForm.profile_pic = resp.profile_pic;
+			});
+
 			userService.update({
 				id : AuthService.currentUser().id},
 				{first_name: $scope.first_name,
@@ -519,10 +530,6 @@ myApp.component('userProfile', {
 			}, function(resp) {
 				$scope.resp = resp;
 				$scope.user = resp.user;
-				console.log($scope.user);
-				$scope.editProfileForm.$setPristine();
-				$scope.editProfileForm.$setUntouched();
-				$scope.about='';
 			});
 		}
 
