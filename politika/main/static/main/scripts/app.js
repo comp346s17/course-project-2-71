@@ -466,10 +466,10 @@ myApp.component('userProfile', {
 	controller: function($scope, userService, $routeParams, AuthService, $rootScope, $location){
 		userService.get({id: $routeParams.userId}, function(resp){
 			$scope.user = resp.user;
-			if($scope.user.first_name === null){
+			if($scope.user.first_name == ''){
 				$scope.user.first_name = 'Anonymous'
 			}
-			if($scope.user.profile_pic === null){
+			if($scope.user.profile_pic == ''){
 				$scope.user.profile_pic = '/static/main/img/user-profile.png'
 			}
 			$scope.events_org = resp.events_org;
