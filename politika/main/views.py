@@ -64,7 +64,7 @@ def eventsApi(request, eventId=None):
 			myMediaList = "[]"
 
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
-			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList, category=category)
+			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList, category=mycategory)
 			event.save()
 			return redirect('home_page')
 	else:

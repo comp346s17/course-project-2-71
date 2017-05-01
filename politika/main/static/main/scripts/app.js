@@ -128,7 +128,9 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 	$scope.checkPermission = function(){
 		if(AuthService.isLoggedIn()){
 			$scope.link = "#!/new-event";
+			$scope.target='';
 		}else{
+			$scope.link ='';
 			$scope.target = '#alertModal';
 			$scope.alertMsg = "Please log in or sign up to add new events!";
 		}
@@ -382,12 +384,13 @@ myApp.component('logIn', {
 });
 
 
-myApp.controller('logoutCtrl', function($scope, userService, AuthService){
+myApp.controller('logoutCtrl', function($scope, userService, AuthService, $rootScope){
 	$scope.logout = function(){
 		userService.save({
 			action: 'logout'
 		}, function(resp){
 			AuthService.logout();
+			$location.redirect('/');
 		})
 	}
 })
