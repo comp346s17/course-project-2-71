@@ -8,19 +8,19 @@
 	<div class="form-group">
 	<div class="error-input">{{resp.error}}</div>
 	  <label for="eventname">Event name:</label>
-	  <input type="text" class="form-control" id="eventname" name="eventname" ng-model="name" placeholder="Event name" required minlength="6" /> 
+	  <input type="text" class="form-control" id="eventname" name="eventname" ng-model="name" placeholder="Event name" ng-valid-required minlength="6" /> 
 	</div>
 	<div class="form-group">
 	  <label>Location: </label>
 	  <div class="row">
 	  		<div class="col-sm-3">
-	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber" required />
+	  			<input type="text" class="form-control" id="streetnumber" placeholder="Street number" ng-model="streetnumber" ng-valid-required />
 	  		</div>
 	  	  	<div class="col-sm-7">
-	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname" required minlength="3" />
+	  	  		<input type="text" class="form-control" id="streetname" placeholder="Street name" ng-model="streetname" ng-valid-required minlength="3" />
 	  	  	</div>
 			<div class="col-sm-2">
-				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip" required minlength="5" />
+				<input type="text" class="form-control" id="streetname" placeholder="Zipcode" ng-model="zip" ng-valid-required minlength="5" maxlength="5" />
 			</div>
 	  </div>
 	</div>
