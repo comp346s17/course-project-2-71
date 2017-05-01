@@ -60,13 +60,28 @@ myApp.service('commentService', function($resource){
 });
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
-	controller: function($scope, eventsService, $routeParams) {
+	controller: function($scope, eventsService, $routeParams, AuthService, $rootScope, $location) {
 		eventsService.query(function(resp){
 			if(resp.length == 0) {
 				$scope.noEvents = 1;
 			}
 			$scope.events = resp;
 		});
+
+		$scope.going = function(event){
+			if(AuthService.isLoggedIn()){
+				eventsService.update({id: event.event.id},{going: (event.event.going + 1)}, 
+					function(resp){
+						if (event.event.going == resp.going){
+							$rootScope.alertMsg = "You are already going to this event!"
+						}else{
+				 			$rootScope.alertMsg = "Event added to your event list. See you there!"
+						}
+					});
+			}else{
+				$rootScope.alertMsg = "Please sign up or log in to attend event"
+			}
+		}
 	}
 });
 
@@ -92,7 +107,6 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 		}else{
 			$scope.target = '#alertModal';
 			$scope.alertMsg = "Please log in or sign up to add new events!";
-			console.log($scope.target)
 		}
 	}
 })
@@ -168,6 +182,7 @@ myApp.component('newEventForm', {
 
 myApp.component('eventDetail', {
 	templateUrl: '/static/main/eventpage.template.html',
+<<<<<<< HEAD
 	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService, $location, $rootScope) {
 		var loggedInUserId;
 		eventsService.get({id: $routeParams.eventId}, function(resp){
@@ -186,7 +201,8 @@ myApp.component('eventDetail', {
 				}
 			}
 			
-		});
+=======
+
 		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
 			$scope.comments = resp;
@@ -203,8 +219,9 @@ myApp.component('eventDetail', {
 			}else{
 				$scope.alertMsg = 'Please sign up or log in to edit event'
 				$scope.targetComment = '#alertModal';
-				$scope.targetMedia = "#alertModal";
-				
+
+				$rootScope.alertMsg = 'Please sign up or log in to edit event'
+
 			}
 		}
 		
@@ -235,9 +252,10 @@ myApp.component('eventDetail', {
 						$scope.event = resp;
 					});
 			}else{
-				$scope.alertMsg = "Please sign up or log in to attend event"
+				$rootScope.alertMsg = "Please sign up or log in to attend event"
 			}
 		}
+
 		$scope.submitComment = function(){
 			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId": loggedInUserId}, function(){
 				commentService.query({eventId:$scope.event.id}, function(resp){
@@ -300,7 +318,6 @@ myApp.component('signUp', {
 				about : $scope.about,
 			}, function(resp){
 				$scope.resp = resp;
-				console.log("NEW USER", resp);
 				AuthService.login(resp.user);
 			});
 		};
