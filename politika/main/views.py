@@ -23,7 +23,6 @@ def search(request):
 		found_entries = Event.objects.filter(entry_query)
 		events = filterOutPastEvents(found_entries)
 		results = [e.to_json() for e in events]
-		print(results)
 	else: #the user searched for an empty query, so return all results
 		events = Event.objects.all()
 		events = filterOutPastEvents(events)
@@ -67,7 +66,7 @@ def eventsApi(request, eventId=None):
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList, category=category)
 			event.save()
-			return redirect('/')
+			return redirect('home_page')
 	else:
 		if(request.method == 'GET'):
 			event = Event.objects.get(id = eventId)

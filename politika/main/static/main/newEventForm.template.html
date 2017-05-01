@@ -100,7 +100,8 @@
 	<div class="row">
 		<div class="form-group col-sm-2">
 		</br></br>
-		  <input type = "button" ng-click="submitEvent()" class="btn btn-default" value = 'Create event'> 
+		  <input type = "button" ng-click="submitEvent()" ng-hide="hasEvent" class="btn btn-default" value = 'Create event'> 
+		  <input type = "button" ng-click="updateEvent()" ng-show="hasEvent" class="btn btn-default" value = 'Update event'>
 		</div>
 		
 	</div>

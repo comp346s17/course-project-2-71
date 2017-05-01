@@ -17,8 +17,8 @@ myApp.factory('AuthService', function() {
   };
 });
 
-myApp.controller('myCtrl', function($scope, $rootScope, AuthService) {
-	
+myApp.controller('myCtrl', function($scope, $rootScope, AuthService, $location) {
+	$scope.currentPage = $location.path()
 	$scope.submitQuery = function(){
 		$rootScope.query = $scope.query
 		console.log($rootScope.query)
@@ -31,6 +31,12 @@ myApp.controller('myCtrl', function($scope, $rootScope, AuthService) {
 		$scope.isNotLoggedIn = !isLoggedIn;
 		$scope.currentUser = AuthService.currentUser();
 	});
+	 $rootScope.$on('$locationChangeStart', function() {
+        $rootScope.previousPage = $scope.currentPage;
+		$scope.currentPage = $location.path();
+		console.log($rootScope.previousPage)
+    });
+	
 
 });
 
@@ -61,10 +67,25 @@ myApp.component('eventThumbnails', {
 				$scope.noEvents = 1;
 			}
 			$scope.events = resp;
-		});
 
+		});
+		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+			$scope.events.forEach(function(event){
+					if(AuthService.currentUser().id == event.organizer.id){
+						event.isOrganizer = true;
+						console.log(event.isOrganizer)
+						
+					}else{
+						event.isOrganizer = null;
+					}
+					
+				})
+			
+		});
+	
 		$scope.going = function(event){
-			if(AuthService.isLoggedIn()){
+			if(AuthService.isLoggedIn()){			
+				
 				eventsService.update({id: event.event.id},{going: (event.event.going + 1)}, 
 					function(resp){
 						if (event.event.going == resp.going){
@@ -105,7 +126,7 @@ myApp.component('searchResults', {
 myApp.controller('newEventCtrl', function($scope, AuthService){
 	$scope.checkPermission = function(){
 		if(AuthService.isLoggedIn()){
-			$scope.link = '#!/new-event';
+			$scope.link = "#!/new-event";
 		}else{
 			$scope.target = '#alertModal';
 			$scope.alertMsg = "Please log in or sign up to add new events!";
@@ -116,17 +137,51 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
-	controller: function($scope, eventsService){
+	controller: function($scope, eventsService, AuthService, $location, $rootScope,$routeParams){
+			if($routeParams.eventId){
+				eventsService.get({id: $routeParams.eventId}, function(resp){
+					$scope.name = resp.title;
+					$scope.detail=resp.description;
+					$scope.date=resp.date;
+					$scope.startTime=resp.startTime;
+					$scope.endTime=resp.endTime;
+					$scope.streetnumber=resp.location.street_number;
+					$scope.streetname=resp.location.street_name;
+					$scope.zip=resp.location.zip_code;
+					$scope.city=resp.location.city;
+					$scope.image=resp.image;
+					$scope.hasEvent = true;
+					$scope.updateEvent = function(){
+						var mydate = $('#date').val()
+						var mystartTime = $('#startTime').val()
+						var myendTime = $('#endTime').val()
+						var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
+						+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+						params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
+						endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
+						eventsService.update({id: $routeParams.eventId},params,function(resp){
+							$location.path($rootScope.previousPage)
+							console.log('id');
+						})
+					}	
+					
+				});
+			}
 			$scope.submitEvent = function(){
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
 				var myendTime = $('#endTime').val()
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
-				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6  
+				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
 				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image , category: mycategory}, 
 				function(resp) {
+				params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
+				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
+				console.log('submit EVENT');
+			
+				eventsService.save(params,	function(resp) {
 					$scope.newEventForm.$setPristine();
 					$scope.newEventForm.$setUntouched();
 					$scope.name = "";
@@ -139,40 +194,60 @@ myApp.component('newEventForm', {
 					$scope.zip='';
 					$scope.city='';
 					$scope.image='';
-				// executed on successful response
-			});
-			
+
+					$location.path($rootScope.previousPage)
+					console.log('no id');
+				});
+			}	
 		
-		}
+		
+		
 		
 	}
-})
+});
 
 
 myApp.component('eventDetail', {
 	templateUrl: '/static/main/eventpage.template.html',
-	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService, $rootScope) {
+	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService, $location, $rootScope) {
+		var loggedInUserId;
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
-		});
+			$scope.isNotOrganizer =  true;
+			console.log($scope.event);
+			console.log(AuthService.currentUser());
+			console.log(AuthService.currentUser().id + 'and '+ $scope.event.organizer.id);
+			if(AuthService.currentUser()){
+				
+				loggedInUserId = AuthService.currentUser().id;
+				if(loggedInUserId == $scope.event.organizer.id){
+					console.log('get here')
+					$scope.isOrganizer = true;
+					$scope.isNotOrganizer = null;
+				}
+			}
+		}
+		)
+
 		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
 			$scope.comments = resp;
 		});
 
-		var loggedInUserId;
-		if(AuthService.currentUser()){
-			loggedInUserId = AuthService.currentUser().id;
-		}
+		
+		
+		
 
 		$scope.checkPermission = function(){
 			if(loggedInUserId){
 				$scope.targetComment = '#addCommentModal';
 				$scope.targetMedia = "#addImageModal";
 			}else{
+				$scope.alertMsg = 'Please sign up or log in to edit event'
 				$scope.targetComment = '#alertModal';
-				$scope.targetMedia = "#alertModal";
+
 				$rootScope.alertMsg = 'Please sign up or log in to edit event'
+
 			}
 		}
 		
@@ -214,7 +289,12 @@ myApp.component('eventDetail', {
 				});
 			});
 		};
-		
+		$scope.deleteEvent = function(){
+			eventsService.delete({id: $scope.event.id}, function(resp) {
+					
+					$location.path($rootScope.previousPage);
+				})
+		}
 		//come back to this
 		/* $scope.submitLike = function(like, comment){
 			if(like == 1){
@@ -225,7 +305,13 @@ myApp.component('eventDetail', {
 			}
 		};
 		 */
-
+		 $scope.editEvent = function(){
+			eventsService.delete({id: $scope.event.id}, function(resp) {
+					
+					$location.path($rootScope.previousPage);
+				})
+		}
+		
 		
 	}
 });
@@ -267,7 +353,7 @@ myApp.component('signUp', {
 
 myApp.component('logIn', {
 	templateUrl: '/static/main/login.template.html',
-	controller: function($scope, userService, AuthService){
+	controller: function($scope, userService, AuthService, $location){
 
 		$scope.$watch(AuthService.isLoggedIn, function (isLoggedIn) {
 			$scope.isLoggedIn = isLoggedIn;
@@ -276,6 +362,7 @@ myApp.component('logIn', {
 			$scope.username="";
 			$scope.password="";
 			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
+
 		});
 
 		$scope.login = function(){
@@ -376,6 +463,9 @@ myApp.config(function($routeProvider, $httpProvider, $resourceProvider, $qProvid
 			template: '<user-profile></user-profile>'
 	   }).
 	   when('/new-event', {
+			template: '<new-event-form></new-event-form>'
+	   }).
+	   when('/new-event/:eventId', {
 			template: '<new-event-form></new-event-form>'
 	   }).
 	   when('/search/',{

@@ -89,7 +89,7 @@ class Event(models.Model):
 		  'title': self.title,
 		  'organizer': self.organizer.to_json(),
 		  'going': self.going,
-		  'date': datetime.datetime.strptime(str(self.date), "%Y-%m-%d").strftime('%m-%d-%Y'),
+		  'date': datetime.datetime.strptime(str(self.date), "%Y-%m-%d").strftime('%m/%d/%Y'),
 		  'startTime': datetime.datetime.strptime(str(self.startTime), "%H:%M:%S").strftime('%I:%M %p'),
 		  'endTime': datetime.datetime.strptime(str(self.endTime), "%H:%M:%S").strftime('%I:%M %p'),
 		  'description': self.description,
