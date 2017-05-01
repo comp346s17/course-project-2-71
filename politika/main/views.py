@@ -23,7 +23,6 @@ def search(request):
 		found_entries = Event.objects.filter(entry_query)
 		events = filterOutPastEvents(found_entries)
 		results = [e.to_json() for e in events]
-		print(results)
 	else: #the user searched for an empty query, so return all results
 		events = Event.objects.all()
 		events = filterOutPastEvents(events)

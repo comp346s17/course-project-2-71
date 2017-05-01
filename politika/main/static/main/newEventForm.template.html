@@ -28,10 +28,10 @@
 			<label class="radio-inline"><input type="radio" name="city" ng-model="city" value = "Minneapolis"/>Minneapolis</label>
 		</div>
 	</div>
+
+
 	<div class="row">
 		<div class="form-group col-sm-3" >
-				 
-		
 			<label for="date">Date:</label>
 			<div class='input-group date' datetime-picker = "{format: 'MM/DD/YYYY'}" >
 				<input type='text' class="form-control" name = "date" id='date' ng-model="date" required/>
@@ -73,6 +73,25 @@
 		  <textarea class="form-control" rows="5" id="eventdetail" ng-model="detail" placeholder="Descriptions for your event" required minlength="20"></textarea>
 		</div>
 	</div>
+
+
+	<div class="row">
+		<div class="form-group col-sm-7">
+			<label>Event Category: </label> <span><i> Choose all that apply</i></span>
+			<div class="input-group">
+      				<label class="checkbox-inline"><input type="checkbox" value="">Activism</label>
+      				<label class="checkbox-inline"><input type="checkbox" value="">Service</label>
+      				<label class="checkbox-inline"><input type="checkbox" value="">Policy</label>
+		    </div><!-- /input-group -->
+		    <div class="input-group">
+      				<label class="checkbox-inline"><input type="checkbox" value="">Environmental Justice</label>
+      				<label class="checkbox-inline"><input type="checkbox" value="">Wealth Disparity</label>
+      				<label class="checkbox-inline"><input type="checkbox" value="">Racial Issue</label>
+		    </div>
+		</div>
+	</div>
+
+	
 	<div class="row">
 		<div class="col-sm-2">
 			<a href="" data-target="#imageModal" data-toggle="modal" class="btn btn-default" style="background-color: #e65c00">Choose image</a>
@@ -87,6 +106,7 @@
 		</div>
 		
 	</div>
+
 </form>
 		
 </div>
