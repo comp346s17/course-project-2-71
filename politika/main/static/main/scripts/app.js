@@ -29,6 +29,9 @@ myApp.controller('myCtrl', function($scope, $rootScope, AuthService, $location) 
 		$scope.isNotLoggedIn = !isLoggedIn;
 		$scope.currentUser = AuthService.currentUser();
 	});
+	
+	//records the previous page the user has visited. Uses this information to redirect user back to that page after they have perfomed
+	//certain actions. i. g. delete an event
 	 $rootScope.$on('$locationChangeStart', function() {
         $rootScope.previousPage = $scope.currentPage;
 		$scope.currentPage = $location.path();
@@ -63,11 +66,12 @@ myApp.service('commentService', function($resource){
 	});
 });
 
+//component that renders the information for all future events in our db to the home page
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams, AuthService, $rootScope, $location) {
 		
-	
+		//get all events
 		eventsService.query(function(resp){
 			if(resp.length == 0) {
 				$scope.noEvents = 1;
@@ -76,31 +80,21 @@ myApp.component('eventThumbnails', {
 			$scope.events = resp;
 			checkIfUserIsOrganizer();
 		});
+		
+		//watch for if a user is logged in
 		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
 
 			checkIfUserIsOrganizer();
 			
 
-			if($scope.events){
-				$scope.events.forEach(function(event){
-						if(AuthService.currentUser().id == event.organizer.id){
-							event.isOrganizer = true;
-							console.log(event.isOrganizer)
-							
-						}else{
-							event.isOrganizer = null;
-						}
-						
-					});
-				}	
-
 		});
+		//method that goes through list of events to be displayed and checks if the current user is the organizer for those events
+		//if the user is organizer the I'm going button turns into a Edit event button
 		var checkIfUserIsOrganizer = function(){
 			if($scope.events){
 				$scope.events.forEach(function(event){
 						if(AuthService.currentUser().id == event.organizer.id){
 							event.isOrganizer = true;
-							
 							
 						}else{
 							event.isOrganizer = null;
@@ -109,6 +103,7 @@ myApp.component('eventThumbnails', {
 					})
 			}
 		}
+		//method that allow user to select the I'm going button and interact witht ht api to rsvp to the event
 		$scope.going = function(event){
 			if(AuthService.isLoggedIn()){			
 				
@@ -137,7 +132,6 @@ myApp.component('advSearch', {
 	controller: function($scope, searchService, $routeParams, $rootScope, $location){
 		$scope.search = function(){
 			var query = $scope.city +' '+ $scope.category;
-			console.log("advanced search ================>>>>", query);
 			$rootScope.query = query;
 			$location.path('/search');
 		}
@@ -145,6 +139,7 @@ myApp.component('advSearch', {
 });
 
 
+//component that deals with user search requests and send them to the search api. It renders the results to the screen
 myApp.component('searchResults', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, searchService, $routeParams, $rootScope, AuthService, eventsService) {
@@ -214,11 +209,12 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 	}
 })
 
-
+//component with form, user can use it to create a new event or update an already existing event for which they organize. 
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
 	controller: function($scope, eventsService, AuthService, $location, $rootScope,$routeParams){
 		
+			//this function is a form validation, it checks that all fields are filled. User cannot submit form otherwise.
 			var fieldIsEmpty = function(){
 				if(!$scope.name || !$scope.detail || $('#date').val() == '' || $('#startTime').val()=='' || $('#endTime').val()=='' || !$scope.streetnumber ||
 				!$scope.streetname || !$scope.zip || !$scope.city){
@@ -238,6 +234,8 @@ myApp.component('newEventForm', {
 				}
 				return false;
 			}
+			
+			//This is when user is editing a already existing event they organize
 			if($routeParams.eventId){
 				eventsService.get({id: $routeParams.eventId}, function(resp){
 					$scope.name = resp.title;
@@ -253,7 +251,7 @@ myApp.component('newEventForm', {
 					$scope.hasEvent = true;
 					$scope.updateEvent = function(){
 						if(!fieldIsEmpty()){
-							var mydate = $('#date').val() //ng-model does not work with the date and time picker for some reason.
+							var mydate = $('#date').val() //ng-model does not work with the date and time pickers for some reason.
 							var mystartTime = $('#startTime').val()
 							var myendTime = $('#endTime').val()
 							var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
@@ -269,7 +267,8 @@ myApp.component('newEventForm', {
 					
 				});
 			};
-	
+			
+			//This is when user is editing a already existing event they organize
 			$scope.submitEvent = function(){
 				if(!fieldIsEmpty()){
 					var mydate = $('#date').val()
@@ -315,7 +314,7 @@ myApp.component('newEventForm', {
 		
 });
 
-
+//component that renders the event a particular event information to the screen
 myApp.component('eventDetail', {
 	templateUrl: '/static/main/eventpage.template.html',
 	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService, $location, $rootScope) {
@@ -323,22 +322,24 @@ myApp.component('eventDetail', {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
 			$scope.isNotOrganizer =  true;
-
+			
 			if(AuthService.currentUser()){
 				
 				loggedInUserId = AuthService.currentUser().id;
-				if(loggedInUserId == $scope.event.organizer.id){
-					console.log('get here')
+				// checks if the current user is the organizer of the event. If yes allows user to edit and delete the event
+				if(loggedInUserId == $scope.event.organizer.id){ 
 					$scope.isOrganizer = true;
 					$scope.isNotOrganizer = null;
 				}
 			}
 		}
 		)
+		//get all comments for this event
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
 			$scope.comments = resp;
 		});
 
+		//checks if the user is logged in, if yes allows then to add comments and media content, otherwise pop up shows up, asking then to log in or sign up
 		$scope.checkPermission = function(){
 			if(loggedInUserId){
 				$scope.targetComment = '#addCommentModal';
@@ -351,9 +352,9 @@ myApp.component('eventDetail', {
 			}
 		}
 		
-		
+		//allows users to add images to the media sections
 		$scope.getImage = function(){
-			console.log($scope.event.id)
+			
 			var newMedia = "{ \"path\": \"" + $scope.image + "\"}";
 			
 			eventsService.update({id: $routeParams.eventId}, {"media_list": newMedia}, function(){
@@ -362,6 +363,7 @@ myApp.component('eventDetail', {
 			});
 			
 		};
+		//allows user to rsvp (say Im going) to an event
 		$scope.going = function(){
 			if(loggedInUserId){
 				userService.get({id: loggedInUserId}, function(resp){
@@ -381,7 +383,8 @@ myApp.component('eventDetail', {
 				$rootScope.alertMsg = "Please sign up or log in to attend event"
 			}
 		}
-
+		
+		//Creates new comment to event
 		$scope.submitComment = function(){
 			commentService.save({eventId:$scope.event.id},{"body": $scope.newComment, "userId": loggedInUserId}, function(){
 				commentService.query({eventId:$scope.event.id}, function(resp){
@@ -389,28 +392,15 @@ myApp.component('eventDetail', {
 				});
 			});
 		};
+		//deletes event
 		$scope.deleteEvent = function(){
 			eventsService.delete({id: $scope.event.id}, function(resp) {
 					
 					$location.path($rootScope.previousPage);
 				})
 		}
-		//come back to this
-		/* $scope.submitLike = function(like, comment){
-			if(like == 1){
-				var currentLike = comment.liked + 1;
-			}
-			else if(like == 0){
-				var currentDislike = comment.disliked + 1;
-			}
-		};
-		 */
-		 $scope.editEvent = function(){
-			eventsService.delete({id: $scope.event.id}, function(resp) {
-					
-					$location.path($rootScope.previousPage);
-				})
-		}
+		
+	
 		
 		
 	}
@@ -572,7 +562,8 @@ myApp.config(function($routeProvider, $httpProvider, $resourceProvider, $qProvid
 	   otherwise('/');
 	});
 
-
+//directive that allows the media section of the event page to work. 
+//it connects the elements in the dom to an external jQuery library.
 myApp.directive('mediaJcarousel', function(){
 	 return {
         // Restrict it to be an attribute in this case
@@ -600,6 +591,8 @@ myApp.directive('mediaJcarousel', function(){
     };
 });
 
+//directive that allows the media section of the event page to work. 
+//it connects the elements in the dom to an external jQuery library.
 myApp.directive('mediaContentArrows', function(){
 	 return {
         // Restrict it to be an attribute in this case
@@ -613,6 +606,8 @@ myApp.directive('mediaContentArrows', function(){
     };
 });
 
+//directive that allows the media section of the event page to work. 
+//it connects the elements in the dom to an external jQuery library.
 myApp.directive('mediaContentPagination', function(){
 	 return {
         // Restrict it to be an attribute in this case
@@ -640,6 +635,8 @@ myApp.directive('mediaContentPagination', function(){
     };
 });
 
+//directive that allows the date and time pickers in the newEventForm component to work. 
+//it connects the elements in the dom to an external jQuery library.
 myApp.directive('datetimePicker', function(){
 	 return {
         // Restrict it to be an attribute in this case

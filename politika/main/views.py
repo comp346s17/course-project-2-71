@@ -41,32 +41,32 @@ def filterOutPastEvents(eventList):
 
 #api that is responsible for serving the events to the front end and creating new events in the database	
 def eventsApi(request, eventId=None):
-	if(eventId == None):
+	if(eventId == None): #get all events
 		if(request.method == 'GET'):
 			events = Event.objects.all()
-			noPastEvents = filterOutPastEvents(events)
-			#filter no it does not include past events
+			noPastEvents = filterOutPastEvents(events)			
+			allEvents = [e.to_json() for e in noPastEvents]			
+			return JsonResponse(allEvents, safe=False) 
 			
-			
-			allEvents = [e.to_json() for e in noPastEvents] # shorthand for loop
-			
-			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
-		elif(request.method == 'POST'):
+		elif(request.method == 'POST'): #create new event
 			params = json.loads(request.body)
-			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
-			
+			#date and time are submited in a different format than what the database accepts. so it is
+			#necessary to convert then tot he corrent format
+			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')			
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
-			if(datetime.datetime.strptime(mydate, '%Y-%m-%d').date() < datetime.datetime.today().date()):
-				print(datetime.datetime.today())
+			
+			#data validation for date and time, return errors if there are mistakes
+			if(datetime.datetime.strptime(mydate, '%Y-%m-%d').date() < datetime.datetime.today().date()): #if date is in the past
 				return JsonResponse({'error': 'Date is in the past. Please select a future date.'})
-			if(datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.strptime(mystartTime,'%H:%M:%S')):
+			if(datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.strptime(mystartTime,'%H:%M:%S')): #if end time is before start time
 				return JsonResponse({'error': 'End time is before start time. Please, pick an end time that is later than start time.'})
+			#if date is today but end time has already passed
 			if(datetime.datetime.strptime(mydate,'%Y-%m-%d').date() == datetime.datetime.today().date() and datetime.datetime.strptime(myendTime,'%H:%M:%S').time() < datetime.datetime.now().time() ):
 				return JsonResponse({'error': 'End time is in the past. Please, pick an end time that is later than now.'})
 			
 			
-			print('get id? ' + str(eventId))
+			
 			myimage = params.get('image', "/static/main/img/eventImage.png")
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
@@ -80,15 +80,15 @@ def eventsApi(request, eventId=None):
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList, category=mycategory)
 			event.save()
 			return JsonResponse({'message': 'Event created'})
-	else:
-		if(request.method == 'GET'):
+	else: 
+		if(request.method == 'GET'): #get specific event
 			event = Event.objects.get(id = eventId)
 			return JsonResponse(event.to_json())
-		elif(request.method == 'DELETE'):
+		elif(request.method == 'DELETE'): #delere specific event
 			event = Event.objects.get(id=eventId)
 			event.delete()
 			return redirect("/")
-		elif(request.method == 'PUT'):
+		elif(request.method == 'PUT'): #update specific an event
 			params = json.loads(request.body)
 			event = Event.objects.get(id=eventId)
 			event.image = params.get('image', event.image)
@@ -126,15 +126,15 @@ def eventsApi(request, eventId=None):
 			event.save()
 			return JsonResponse(event.to_json())
 
-
+#api that is responsible for serving the comments to the front end and creating new comments in the database	
 def commentsApi(request, eventId, commentId=None):
 	
-		if(request.method == 'GET'):
+		if(request.method == 'GET'): #get comments for a particular event
 			comments = Comment.objects.filter(eventId = Event.objects.get(id=eventId))
-			allComments = [c.to_json() for c in comments] # shorthand for loop
+			allComments = [c.to_json() for c in comments] 			
+			return JsonResponse(allComments, safe=False) 
 			
-			return JsonResponse(allComments, safe=False) # safe=False required for sending lists
-		elif(request.method == 'POST'):
+		elif(request.method == 'POST'): #create new comment in a particular event
 			params = json.loads(request.body)
 			myUser =  OurUser.objects.get(id=params.get('userId'))
 			myEvent = Event.objects.get(id=eventId)
@@ -145,12 +145,12 @@ def commentsApi(request, eventId, commentId=None):
 			comment.save()
 			return redirect("/")
 			
-		elif(request.method == 'DELETE'):
+		elif(request.method == 'DELETE'): #delete a comment
 			comment = Comment.objects.get(id=commentId)
 			event.delete()
 			return redirect("/")
 			
-		elif(request.method == 'PUT'):
+		elif(request.method == 'PUT'): #in the future we can use this to allow users to edit an comment
 			params = json.loads(request.body)
 			pass
 			
