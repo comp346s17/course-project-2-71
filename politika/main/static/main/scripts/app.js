@@ -66,10 +66,25 @@ myApp.component('eventThumbnails', {
 				$scope.noEvents = 1;
 			}
 			$scope.events = resp;
-		});
 
+		});
+		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+			$scope.events.forEach(function(event){
+					if(AuthService.currentUser().id == event.organizer.id){
+						event.isOrganizer = true;
+						console.log(event.isOrganizer)
+						
+					}else{
+						event.isOrganizer = null;
+					}
+					
+				})
+			
+		});
+	
 		$scope.going = function(event){
-			if(AuthService.isLoggedIn()){
+			if(AuthService.isLoggedIn()){			
+				
 				eventsService.update({id: event.event.id},{going: (event.event.going + 1)}, 
 					function(resp){
 						if (event.event.going == resp.going){
@@ -182,7 +197,6 @@ myApp.component('newEventForm', {
 
 myApp.component('eventDetail', {
 	templateUrl: '/static/main/eventpage.template.html',
-<<<<<<< HEAD
 	controller: function($scope, eventsService, $routeParams, commentService, userService, AuthService, $location, $rootScope) {
 		var loggedInUserId;
 		eventsService.get({id: $routeParams.eventId}, function(resp){
@@ -200,8 +214,8 @@ myApp.component('eventDetail', {
 					$scope.isNotOrganizer = null;
 				}
 			}
-			
-=======
+		}
+		)
 
 		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
@@ -327,7 +341,7 @@ myApp.component('signUp', {
 
 myApp.component('logIn', {
 	templateUrl: '/static/main/login.template.html',
-	controller: function($scope, userService, AuthService){
+	controller: function($scope, userService, AuthService, $location){
 
 		$scope.$watch(AuthService.isLoggedIn, function (isLoggedIn) {
 			$scope.isLoggedIn = isLoggedIn;
@@ -336,6 +350,7 @@ myApp.component('logIn', {
 			$scope.username="";
 			$scope.password="";
 			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
+
 		});
 
 		$scope.login = function(){
