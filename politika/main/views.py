@@ -54,13 +54,12 @@ def eventsApi(request, eventId=None):
 			
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
 			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
-			
 			if(datetime.datetime.strptime(mydate, '%Y-%m-%d').date() < datetime.datetime.today().date()):
 				print(datetime.datetime.today())
 				return JsonResponse({'error': 'Date is in the past. Please select a future date.'})
 			if(datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.strptime(mystartTime,'%H:%M:%S')):
 				return JsonResponse({'error': 'End time is before start time. Please, pick an end time that is later than start time.'})
-			if(datetime.datetime.strptime(mydate,'%Y-%m-%d').date() == datetime.datetime.today().date() and datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.now() ):
+			if(datetime.datetime.strptime(mydate,'%Y-%m-%d').date() == datetime.datetime.today().date() and datetime.datetime.strptime(myendTime,'%H:%M:%S').time() < datetime.datetime.now().time() ):
 				return JsonResponse({'error': 'End time is in the past. Please, pick an end time that is later than now.'})
 			
 			

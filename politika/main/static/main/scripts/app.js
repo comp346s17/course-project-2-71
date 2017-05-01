@@ -96,12 +96,7 @@ myApp.component('eventThumbnails', {
 				$scope.events.forEach(function(event){
 						if(AuthService.currentUser().id == event.organizer.id){
 							event.isOrganizer = true;
-							$scope.deleteEvent = function(){
-								eventsService.delete({id: $scope.event.id}, function(resp) {
-										
-										$location.path($rootScope.previousPage);
-									})
-							}
+							
 							
 						}else{
 							event.isOrganizer = null;
@@ -136,7 +131,7 @@ myApp.component('eventThumbnails', {
 
 myApp.component('searchResults', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
-	controller: function($scope, searchService, $routeParams, $rootScope, AuthService) {
+	controller: function($scope, searchService, $routeParams, $rootScope, AuthService, eventsService) {
 		console.log($rootScope.query)
 		var query = {"q": $rootScope.query}
 		console.log(query)
@@ -156,12 +151,7 @@ myApp.component('searchResults', {
 				$scope.events.forEach(function(event){
 						if(AuthService.currentUser().id == event.organizer.id){
 							event.isOrganizer = true;
-							$scope.deleteEvent = function(){
-								eventsService.delete({id: $scope.event.id}, function(resp) {
-										
-										$location.path($rootScope.previousPage);
-									})
-							}
+							
 							
 						}else{
 							event.isOrganizer = null;
@@ -212,6 +202,26 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 myApp.component('newEventForm', {
 	templateUrl: '/static/main/newEventForm.template.html',
 	controller: function($scope, eventsService, AuthService, $location, $rootScope,$routeParams){
+		
+			var fieldIsEmpty = function(){
+				if(!$scope.name || !$scope.detail || $('#date').val() == '' || $('#startTime').val()=='' || $('#endTime').val()=='' || !$scope.streetnumber ||
+				!$scope.streetname || !$scope.zip || !$scope.city){
+					$scope.resp = {'error': 'Please fill all fields'}
+					console.log($('#date').val()=='')
+					console.log($('#startTime').val()=='')
+					console.log($('#endTime').val()=='')
+					console.log(!$scope.name)
+					console.log( !$scope.detail)
+					console.log(!$scope.streetnumber)
+					console.log(!$scope.streetname)
+					console.log( !$scope.city)
+					console.log( !$scope.zip)
+					console.log(!$scope.name || !$scope.detail || $('#date').val() == '' || !$('#startTime').val()=='' || !$('#endTime').val()=='' || !$scope.streetnumber ||
+				!$scope.streetname || !$scope.zip || !$scope.city)
+					return true;
+				}
+				return false;
+			}
 			if($routeParams.eventId){
 				eventsService.get({id: $routeParams.eventId}, function(resp){
 					$scope.name = resp.title;
@@ -226,57 +236,61 @@ myApp.component('newEventForm', {
 					$scope.image=resp.image;
 					$scope.hasEvent = true;
 					$scope.updateEvent = function(){
-						var mydate = $('#date').val()
-						var mystartTime = $('#startTime').val()
-						var myendTime = $('#endTime').val()
-						var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
-						+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
-						params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
-						endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
-						eventsService.update({id: $routeParams.eventId},params,function(resp){
-							$location.path($rootScope.previousPage)
-							console.log('id');
-						})
-					}	
+						if(!fieldIsEmpty()){
+							var mydate = $('#date').val() //ng-model does not work with the date and time picker for some reason.
+							var mystartTime = $('#startTime').val()
+							var myendTime = $('#endTime').val()
+							var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
+							+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+							params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
+							endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
+							eventsService.update({id: $routeParams.eventId},params,function(resp){
+								$location.path($rootScope.previousPage)
+								console.log('id');
+							})
+					}
+				}
 					
 				});
 			};
 	
 			$scope.submitEvent = function(){
-				var mydate = $('#date').val()
-				var mystartTime = $('#startTime').val()
-				var myendTime = $('#endTime').val()
-				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
-				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
-				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6
+				if(!fieldIsEmpty()){
+					var mydate = $('#date').val()
+					var mystartTime = $('#startTime').val()
+					var myendTime = $('#endTime').val()
+					var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
+					+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+					var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6
 
-				params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image, category: mycategory};
-				console.log('submit EVENT');
-			
-				eventsService.save(params,	function(resp) {
+					params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
+					endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image, category: mycategory};
+					console.log('submit EVENT');
+					console.log($scope.title)
+					eventsService.save(params,	function(resp) {
 
+						
+
+						if(!resp.error){
+							$location.path($rootScope.previousPage)
+							$scope.newEventForm.$setPristine();
+							$scope.newEventForm.$setUntouched();
+							$scope.name = "";
+							$scope.detail='';
+							$scope.date='';
+							$scope.startTime='';
+							$scope.endTime='';
+							$scope.streetnumber='';
+							$scope.streetname='';
+							$scope.zip='';
+							$scope.city='';
+							$scope.image='';
+						}
+						$scope.resp = resp;
 					
-
-					if(!resp.error){
-						$location.path($rootScope.previousPage)
-						$scope.newEventForm.$setPristine();
-						$scope.newEventForm.$setUntouched();
-						$scope.name = "";
-						$scope.detail='';
-						$scope.date='';
-						$scope.startTime='';
-						$scope.endTime='';
-						$scope.streetnumber='';
-						$scope.streetname='';
-						$scope.zip='';
-						$scope.city='';
-						$scope.image='';
-					}
-					$scope.resp = resp;
-				
-					console.log(resp);
-				});
+						console.log(resp);
+					});
+				}	
 			}	
 
 					
