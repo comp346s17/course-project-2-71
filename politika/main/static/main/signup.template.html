@@ -13,7 +13,7 @@
 	      <div class="modal-body">
 	      		<div class="container-fluid">
 					<div class="col-sm-6">
-						<form name="signupForm" id='signup-form' ng-submit="register()">
+						<form name="signupForm" sign-Up-Validator ="{rules:{password: {passwordStrong:true}}}" id='signup-form' ng-submit="register()">
 
 							<div class="form-group">
 							  <label for="username">Username:</label>
@@ -22,7 +22,7 @@
 
 							<div class="form-group">
 							  <label for="password">Password:</label>
-							  <input type="password" class="form-control" id="password" ng-model="password1" placeholder="at least 6 characters" required minlength="6" />
+							  <input type="password" class="form-control" id="password" ng-model="password1" placeholder="at least 6 characters" required minlength="6"  />
 							</div>
 
 							<div class="form-group">
@@ -33,7 +33,7 @@
 							<div style="font-style: italic; padding-top: 3px; padding-bottom: 3px">Optional Fields for your profile</div>
 							<div class="form-group">
 								<label for="first_name">First name:</label>
-								<input type="text" class="form-control" id="first_name" ng-model="first_name" placeholder="eg. Phuc"/>
+								<input type="text" class="form-control" id="first_name" required ng-model="first_name" placeholder="eg. Phuc"/>
 							</div>
 
 							<div class="form-group">

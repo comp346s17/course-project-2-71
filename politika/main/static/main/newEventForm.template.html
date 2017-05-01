@@ -4,7 +4,9 @@
 	  <h1>Add New Event</h1>
 	</div>
 <form id="newevent-form" name='newEventForm'>
+	
 	<div class="form-group">
+	<div class="error-input">{{resp.error}}</div>
 	  <label for="eventname">Event name:</label>
 	  <input type="text" class="form-control" id="eventname" name="eventname" ng-model="name" placeholder="Event name" required minlength="6" /> 
 	</div>

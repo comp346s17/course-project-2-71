@@ -50,22 +50,33 @@ def eventsApi(request, eventId=None):
 			return JsonResponse(allEvents, safe=False) # safe=False required for sending lists
 		elif(request.method == 'POST'):
 			params = json.loads(request.body)
+			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+			
+			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
+			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
+			
+			if(datetime.datetime.strptime(mydate, '%Y-%m-%d').date() < datetime.datetime.today().date()):
+				print(datetime.datetime.today())
+				return JsonResponse({'error': 'Date is in the past. Please select a future date.'})
+			if(datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.strptime(mystartTime,'%H:%M:%S')):
+				return JsonResponse({'error': 'End time is before start time. Please, pick an end time that is later than start time.'})
+			if(datetime.datetime.strptime(mydate,'%Y-%m-%d').date() == datetime.datetime.today().date() and datetime.datetime.strptime(myendTime,'%H:%M:%S') < datetime.datetime.now() ):
+				return JsonResponse({'error': 'End time is in the past. Please, pick an end time that is later than now.'})
+			
+			
 			print('get id? ' + str(eventId))
 			myimage = params.get('image', "/static/main/img/eventImage.png")
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
 			myorganizer = request.user
 			mygoing = 0
-			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
-			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
-			myendTime = datetime.datetime.strptime(params.get('endTime'), "%I:%M %p").strftime('%H:%M:%S')
 			mydescription = params.get('description',"This event will be awesome")
 			myMediaList = "[]"
 
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
 			event.save()
-			return redirect('home_page')
+			return JsonResponse({'message': 'Event created'})
 	else:
 		if(request.method == 'GET'):
 			event = Event.objects.get(id = eventId)

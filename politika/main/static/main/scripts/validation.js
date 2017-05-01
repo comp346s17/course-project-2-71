@@ -28,7 +28,7 @@ $.validator.addMethod('strongPassword', function(value, element) {
   }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
 
 
-$('#signup-form').validate();
+$('#signup-form').validate({});
 
 $('#newevent-form').validate();
 $('#login-form').validate();

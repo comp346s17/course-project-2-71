@@ -62,27 +62,39 @@ myApp.service('commentService', function($resource){
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams, AuthService, $rootScope, $location) {
+		
+	
 		eventsService.query(function(resp){
 			if(resp.length == 0) {
 				$scope.noEvents = 1;
 			}
+			
 			$scope.events = resp;
-
+			checkIfUserIsOrganizer();
 		});
 		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
-			$scope.events.forEach(function(event){
-					if(AuthService.currentUser().id == event.organizer.id){
-						event.isOrganizer = true;
-						console.log(event.isOrganizer)
-						
-					}else{
-						event.isOrganizer = null;
-					}
-					
-				})
+			checkIfUserIsOrganizer();
 			
 		});
-	
+		var checkIfUserIsOrganizer = function(){
+			if($scope.events){
+				$scope.events.forEach(function(event){
+						if(AuthService.currentUser().id == event.organizer.id){
+							event.isOrganizer = true;
+							$scope.deleteEvent = function(){
+								eventsService.delete({id: $scope.event.id}, function(resp) {
+										
+										$location.path($rootScope.previousPage);
+									})
+							}
+							
+						}else{
+							event.isOrganizer = null;
+						}
+						
+					})
+			}
+		}
 		$scope.going = function(event){
 			if(AuthService.isLoggedIn()){			
 				
@@ -109,7 +121,7 @@ myApp.component('eventThumbnails', {
 
 myApp.component('searchResults', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
-	controller: function($scope, searchService, $routeParams, $rootScope) {
+	controller: function($scope, searchService, $routeParams, $rootScope, AuthService) {
 		console.log($rootScope.query)
 		var query = {"q": $rootScope.query}
 		console.log(query)
@@ -118,8 +130,53 @@ myApp.component('searchResults', {
 				$scope.noResults = 1;
 			}
 			$scope.events = resp;
+			checkIfUserIsOrganizer();
 		}); 
+		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+			checkIfUserIsOrganizer();
+			
+		});
+		var checkIfUserIsOrganizer = function(){
+			if($scope.events){
+				$scope.events.forEach(function(event){
+						if(AuthService.currentUser().id == event.organizer.id){
+							event.isOrganizer = true;
+							$scope.deleteEvent = function(){
+								eventsService.delete({id: $scope.event.id}, function(resp) {
+										
+										$location.path($rootScope.previousPage);
+									})
+							}
+							
+						}else{
+							event.isOrganizer = null;
+						}
+						
+					})
+			}
+		}
+		$scope.going = function(event){
+			if(AuthService.isLoggedIn()){			
+				
+				eventsService.update({id: event.event.id},{going: (event.event.going + 1)}, 
+					function(resp){
+						if (event.event.going == resp.going){
+							$rootScope.alertMsg = "You are already going to this event!"
+						}else{
+				 			$rootScope.alertMsg = "Event added to your event list. See you there!";
+				 			$scope.events.forEach(function(event){
+				 				if(event.id==resp.id){
+				 					event.going = resp.going;
+				 				}
+				 			});
+						}
+					});
+			}else{
+				$rootScope.alertMsg = "Please sign up or log in to attend event"
+			}
+		}
 	}
+	
 });
 
 
@@ -178,26 +235,28 @@ myApp.component('newEventForm', {
 				console.log('submit EVENT');
 			
 				eventsService.save(params,	function(resp) {
-					$scope.newEventForm.$setPristine();
-					$scope.newEventForm.$setUntouched();
-					$scope.name = "";
-					$scope.detail='';
-					$scope.date='';
-					$scope.startTime='';
-					$scope.endTime='';
-					$scope.streetnumber='';
-					$scope.streetname='';
-					$scope.zip='';
-					$scope.city='';
-					$scope.image='';
+					
 
-					$location.path($rootScope.previousPage)
-					console.log('no id');
+					if(!resp.error){
+						$location.path($rootScope.previousPage)
+						$scope.newEventForm.$setPristine();
+						$scope.newEventForm.$setUntouched();
+						$scope.name = "";
+						$scope.detail='';
+						$scope.date='';
+						$scope.startTime='';
+						$scope.endTime='';
+						$scope.streetnumber='';
+						$scope.streetname='';
+						$scope.zip='';
+						$scope.city='';
+						$scope.image='';
+					}
+					$scope.resp = resp;
+				
+					console.log(resp);
 				});
 			}	
-		
-		
-		
 		
 	}
 });
@@ -210,9 +269,7 @@ myApp.component('eventDetail', {
 		eventsService.get({id: $routeParams.eventId}, function(resp){
 			$scope.event = resp;
 			$scope.isNotOrganizer =  true;
-			console.log($scope.event);
-			console.log(AuthService.currentUser());
-			console.log(AuthService.currentUser().id + 'and '+ $scope.event.organizer.id);
+
 			if(AuthService.currentUser()){
 				
 				loggedInUserId = AuthService.currentUser().id;
@@ -224,15 +281,9 @@ myApp.component('eventDetail', {
 			}
 		}
 		)
-
-		
 		commentService.query({eventId:$routeParams.eventId}, function(resp){
 			$scope.comments = resp;
 		});
-
-		
-		
-		
 
 		$scope.checkPermission = function(){
 			if(loggedInUserId){
@@ -241,8 +292,7 @@ myApp.component('eventDetail', {
 			}else{
 				$scope.alertMsg = 'Please sign up or log in to edit event'
 				$scope.targetComment = '#alertModal';
-
-				$rootScope.alertMsg = 'Please sign up or log in to edit event'
+				$rootScope.alertMsg = 'Please sign up or log in to edit event';
 
 			}
 		}
@@ -558,4 +608,5 @@ myApp.directive('datetimePicker', function(){
         }
     };
 });
+
 
