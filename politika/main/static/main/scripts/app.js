@@ -52,6 +52,7 @@ myApp.service('commentService', function($resource){
 		'update': { method:'PUT' }
 	});
 });
+
 myApp.component('eventThumbnails', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
 	controller: function($scope, eventsService, $routeParams, AuthService, $rootScope, $location) {
@@ -69,7 +70,12 @@ myApp.component('eventThumbnails', {
 						if (event.event.going == resp.going){
 							$rootScope.alertMsg = "You are already going to this event!"
 						}else{
-				 			$rootScope.alertMsg = "Event added to your event list. See you there!"
+				 			$rootScope.alertMsg = "Event added to your event list. See you there!";
+				 			$scope.events.forEach(function(event){
+				 				if(event.id==resp.id){
+				 					event.going = resp.going;
+				 				}
+				 			});
 						}
 					});
 			}else{
@@ -78,6 +84,7 @@ myApp.component('eventThumbnails', {
 		}
 	}
 });
+
 
 myApp.component('searchResults', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
@@ -93,6 +100,7 @@ myApp.component('searchResults', {
 		}); 
 	}
 });
+
 
 myApp.controller('newEventCtrl', function($scope, AuthService){
 	$scope.checkPermission = function(){
