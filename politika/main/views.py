@@ -66,7 +66,7 @@ def eventsApi(request, eventId=None):
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
 			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
 			event.save()
-			return redirect('index')
+			return redirect('home_page')
 	else:
 		if(request.method == 'GET'):
 			event = Event.objects.get(id = eventId)
