@@ -19,7 +19,7 @@ def search(request):
 	
 		query_string = request.GET['q']
 		
-		entry_query = get_query(query_string, ['title', 'description','location'])
+		entry_query = get_query(query_string, ['title', 'description','location', 'category'])
 		found_entries = Event.objects.filter(entry_query)
 		events = filterOutPastEvents(found_entries)
 		results = [e.to_json() for e in events]

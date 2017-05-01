@@ -128,6 +128,18 @@ myApp.component('eventThumbnails', {
 	}
 });
 
+myApp.component('advSearch', {
+	templateUrl: '/static/main/advsearch.template.html',
+	controller: function($scope, searchService, $routeParams, $rootScope, $location){
+		$scope.search = function(){
+			var query = $scope.city +' '+ $scope.category;
+			console.log("advanced search ================>>>>", query);
+			$rootScope.query = query;
+			$location.path('/search');
+		}
+	}
+});
+
 
 myApp.component('searchResults', {
 	templateUrl: '/static/main/eventThumbnail.template.html',
@@ -480,10 +492,10 @@ myApp.component('userProfile', {
 	controller: function($scope, userService, $routeParams, AuthService, $rootScope, $location){
 		userService.get({id: $routeParams.userId}, function(resp){
 			$scope.user = resp.user;
-			if($scope.user.first_name === null){
+			if($scope.user.first_name == ''){
 				$scope.user.first_name = 'Anonymous'
 			}
-			if($scope.user.profile_pic === null){
+			if($scope.user.profile_pic == ''){
 				$scope.user.profile_pic = '/static/main/img/user-profile.png'
 			}
 			$scope.events_org = resp.events_org;
@@ -524,12 +536,6 @@ myApp.component('userProfile', {
 	}
 });
 
-myApp.component('advSearch', {
-	templateUrl: '/static/main/advsearch.template.html',
-	controller: function($scope){
-		//nothing here yet
-	}
-});
 
 myApp.config(function($routeProvider, $httpProvider, $resourceProvider, $qProvider) {
 	$httpProvider.defaults.xsrfCookieName = 'csrftoken';
