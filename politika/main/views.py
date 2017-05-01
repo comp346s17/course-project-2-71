@@ -28,7 +28,8 @@ def search(request):
 		events = filterOutPastEvents(events)
 		results = [e.to_json() for e in events]
 	return JsonResponse(results, safe=False) 
-	
+
+#method filters out all events that already passed and returns a list of events.	
 def filterOutPastEvents(eventList):
 	noPastEvents = []	
 	for event in eventList:
@@ -36,7 +37,9 @@ def filterOutPastEvents(eventList):
 		if(eventDateTime >= datetime.datetime.now()):
 			noPastEvents.append(event)
 	return noPastEvents		
-	
+
+
+#api that is responsible for serving the events to the front end and creating new events in the database	
 def eventsApi(request, eventId=None):
 	if(eventId == None):
 		if(request.method == 'GET'):
