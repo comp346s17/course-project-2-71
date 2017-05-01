@@ -70,17 +70,18 @@ myApp.component('eventThumbnails', {
 
 		});
 		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
-			$scope.events.forEach(function(event){
-					if(AuthService.currentUser().id == event.organizer.id){
-						event.isOrganizer = true;
-						console.log(event.isOrganizer)
+			if($scope.events){
+				$scope.events.forEach(function(event){
+						if(AuthService.currentUser().id == event.organizer.id){
+							event.isOrganizer = true;
+							console.log(event.isOrganizer)
+							
+						}else{
+							event.isOrganizer = null;
+						}
 						
-					}else{
-						event.isOrganizer = null;
-					}
-					
-				})
-			
+					});
+				}	
 		});
 	
 		$scope.going = function(event){
@@ -166,7 +167,8 @@ myApp.component('newEventForm', {
 					}	
 					
 				});
-			}
+			};
+
 			$scope.submitEvent = function(){
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
@@ -174,11 +176,9 @@ myApp.component('newEventForm', {
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
 				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6
-				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image , category: mycategory}, 
-				function(resp) {
+
 				params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
+				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image, category: mycategory};
 				console.log('submit EVENT');
 			
 				eventsService.save(params,	function(resp) {
@@ -194,11 +194,13 @@ myApp.component('newEventForm', {
 					$scope.zip='';
 					$scope.city='';
 					$scope.image='';
-
+					$scope.Items.forEach(function() {
+						item.Selected = false;
+					});
 					$location.path($rootScope.previousPage)
 					console.log('no id');
-				});
-			}	
+				});	
+			}
 		
 		
 		
