@@ -73,8 +73,23 @@ myApp.component('eventThumbnails', {
 			checkIfUserIsOrganizer();
 		});
 		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
+
 			checkIfUserIsOrganizer();
 			
+
+			if($scope.events){
+				$scope.events.forEach(function(event){
+						if(AuthService.currentUser().id == event.organizer.id){
+							event.isOrganizer = true;
+							console.log(event.isOrganizer)
+							
+						}else{
+							event.isOrganizer = null;
+						}
+						
+					});
+				}	
+
 		});
 		var checkIfUserIsOrganizer = function(){
 			if($scope.events){
@@ -184,7 +199,9 @@ myApp.controller('newEventCtrl', function($scope, AuthService){
 	$scope.checkPermission = function(){
 		if(AuthService.isLoggedIn()){
 			$scope.link = "#!/new-event";
+			$scope.target='';
 		}else{
+			$scope.link ='';
 			$scope.target = '#alertModal';
 			$scope.alertMsg = "Please log in or sign up to add new events!";
 		}
@@ -223,18 +240,22 @@ myApp.component('newEventForm', {
 					}	
 					
 				});
-			}
+			};
+	
 			$scope.submitEvent = function(){
 				var mydate = $('#date').val()
 				var mystartTime = $('#startTime').val()
 				var myendTime = $('#endTime').val()
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6
+
 				params = {title: $scope.name,description: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image }
+				endTime:myendTime, location: mylocation, organizer:AuthService.currentUser().id, image: $scope.image, category: mycategory};
 				console.log('submit EVENT');
 			
 				eventsService.save(params,	function(resp) {
+
 					
 
 					if(!resp.error){
@@ -257,8 +278,11 @@ myApp.component('newEventForm', {
 					console.log(resp);
 				});
 			}	
+
+					
+			}
+
 		
-	}
 });
 
 
@@ -426,12 +450,13 @@ myApp.component('logIn', {
 });
 
 
-myApp.controller('logoutCtrl', function($scope, userService, AuthService){
+myApp.controller('logoutCtrl', function($scope, userService, AuthService, $rootScope){
 	$scope.logout = function(){
 		userService.save({
 			action: 'logout'
 		}, function(resp){
 			AuthService.logout();
+			$location.redirect('/');
 		})
 	}
 })
