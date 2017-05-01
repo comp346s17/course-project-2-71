@@ -29,6 +29,6 @@ urlpatterns = [
 	url(r'^api/comments/(?P<eventId>[0-9]+)/(?P<commentId>[0-9]+)/$', views.commentsApi),
     url(r'^api/users/$', views.usersApi),
     url(r'^api/users/(?P<userId>[0-9]+)$', views.usersApi),
-    url(r'^$', views.index),
+    url(r'^$', views.index, name = 'home_page'),
 	url(r'^api/search/?$', views.search, name = 'search_view'),
 ]
