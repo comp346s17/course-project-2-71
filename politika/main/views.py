@@ -56,6 +56,7 @@ def eventsApi(request, eventId=None):
 			mytitle = params.get('title', "The greatest event ever")
 			mylocation = params.get('location', "St. Paul")
 			myorganizer = request.user
+			mycategory = params.get('category')
 			mygoing = 0
 			mydate =  datetime.datetime.strptime(params.get('date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 			mystartTime = datetime.datetime.strptime(params.get('startTime'), "%I:%M %p").strftime('%H:%M:%S')
@@ -64,7 +65,7 @@ def eventsApi(request, eventId=None):
 			myMediaList = "[]"
 
 			event = Event(title=mytitle, organizer=myorganizer, image = myimage, 
-			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList)
+			location= mylocation, going = mygoing, date = mydate, startTime = mystartTime, endTime = myendTime, description = mydescription, media_list = myMediaList, category=category)
 			event.save()
 			return redirect('/')
 	else:
@@ -81,6 +82,7 @@ def eventsApi(request, eventId=None):
 			event.image = params.get('image', event.image)
 			event.title = params.get('title', event.title)
 			event.location = params.get('location', event.location)
+			event.category = params.get('category', event.category)
 			if params.get('going') and not event.attendees.filter(id=request.user.id).exists():
 				event.going = params.get('going')
 				junc = junctionEventUser(userId=request.user, eventId=event)

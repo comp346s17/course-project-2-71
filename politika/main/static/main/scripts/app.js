@@ -123,8 +123,9 @@ myApp.component('newEventForm', {
 				var myendTime = $('#endTime').val()
 				var mylocation = '{\"street_number\": \"' + $scope.streetnumber + '\", \"street_name\": \"' + $scope.streetname + '\", \"city\": \"' + $scope.city
 				+ '\", \"zip_code\": \"' + $scope.zip + '\"}';
+				var mycategory = $scope.val1 +" "+ $scope.val2 +' '+ $scope.val3 +' '+ $scope.val4 +' '+ $scope.val5 +' '+ $scope.val6  
 				eventsService.save({title: $scope.name,descripition: $scope.detail, date: mydate, startTime: mystartTime, 
-				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image }, 
+				endTime:myendTime, location: mylocation, organizer:2, image: $scope.image , category: mycategory}, 
 				function(resp) {
 					$scope.newEventForm.$setPristine();
 					$scope.newEventForm.$setUntouched();
