@@ -37,7 +37,7 @@ myApp.controller('myCtrl', function($scope, $rootScope, AuthService, $location) 
 
 });
 
-
+//Service for user API
 myApp.service('userService', function($resource){
 	return $resource('/api/users/:id', {}, {
 		'update': {method: 'PUT'}
@@ -375,6 +375,7 @@ myApp.component('eventDetail', {
 				});
 			});
 		};
+
 		$scope.deleteEvent = function(){
 			eventsService.delete({id: $scope.event.id}, function(resp) {
 					
@@ -391,23 +392,19 @@ myApp.component('eventDetail', {
 			}
 		};
 		 */
-		 $scope.editEvent = function(){
-			eventsService.delete({id: $scope.event.id}, function(resp) {
-					
-					$location.path($rootScope.previousPage);
-				})
-		}
-		
 		
 	}
 });
 
 
+// component handles registration by sending requests to the user API and displays errors or success message
 myApp.component('signUp', {
 	templateUrl: '/static/main/signup.template.html',
 	controller: function($scope, userService, AuthService){
+
+		// Resets the form after user logs in or out
 		$scope.$watch( AuthService.isLoggedIn, function (isLoggedIn) {
-			$scope.isLoggedIn = isLoggedIn;
+			$scope.isLoggedIn = isLoggedIn; //condition to display success message
 			$scope.signupForm.$setPristine();
 			$scope.signupForm.$setUntouched();
 			$scope.username = "";
@@ -415,12 +412,12 @@ myApp.component('signUp', {
 			$scope.password2='';
 			$scope.profile_pic='';
 			$scope.about='';
-			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
+			isLoggedIn ? $scope.modal = "modal" : $scope.modal="" //if logged in, allow user to press enter to dismiss modal
 		});
+
 		$scope.register = function(){
-			console.log("ABOUT???!",$scope.about);
 			userService.save({
-				form: 'signup',
+				form: 'signup', //to differentiate from log in request
 				username : $scope.username,
 				password1 : $scope.password1,
 				password2 : $scope.password2,
@@ -430,24 +427,26 @@ myApp.component('signUp', {
 				about : $scope.about,
 			}, function(resp){
 				$scope.resp = resp;
-				AuthService.login(resp.user);
+				AuthService.login(resp.user); //if success, log user in
 			});
 		};
 
 	}
 });
 
+
 myApp.component('logIn', {
 	templateUrl: '/static/main/login.template.html',
 	controller: function($scope, userService, AuthService, $location){
 
+		//Reset form after user logs in or out
 		$scope.$watch(AuthService.isLoggedIn, function (isLoggedIn) {
-			$scope.isLoggedIn = isLoggedIn;
+			$scope.isLoggedIn = isLoggedIn; //condition to display log in success msg
 			$scope.loginForm.$setPristine();
 			$scope.loginForm.$setUntouched();
 			$scope.username="";
 			$scope.password="";
-			isLoggedIn ? $scope.modal = "modal" : $scope.modal=""
+			isLoggedIn ? $scope.modal = "modal" : $scope.modal="" //if log in succeeds, allow user to dismiss modal by Enter key
 
 		});
 
@@ -458,55 +457,58 @@ myApp.component('logIn', {
 				password : $scope.password,
 			}, function(resp){
 				$scope.resp = resp;
-				AuthService.login(resp.user);
+				AuthService.login(resp.user);//change authorizations status to logged in 
 				
 			});
 		};
 	}
 });
 
-
+//Called when user click logout link
 myApp.controller('logoutCtrl', function($scope, userService, AuthService, $rootScope){
 	$scope.logout = function(){
 		userService.save({
 			action: 'logout'
 		}, function(resp){
 			AuthService.logout();
-			$location.redirect('/');
+			$location.redirect('/'); //redirect user back to home page
 		})
 	}
 })
 
+//component displaying the user profile page
 myApp.component('userProfile', {
 	templateUrl: '/static/main/profile.template.html',
 	controller: function($scope, userService, $routeParams, AuthService, $rootScope, $location){
+
+		//get user profile info from user API
 		userService.get({id: $routeParams.userId}, function(resp){
 			$scope.user = resp.user;
-			if($scope.user.first_name == ''){
+			if($scope.user.first_name == ''){ //if user hasn't provided a first name, display Anonymous by default
 				$scope.user.first_name = 'Anonymous'
 			}
-			if($scope.user.profile_pic == ''){
-				$scope.user.profile_pic = '/static/main/img/user-profile.png'
+			if($scope.user.profile_pic == ''){ 
+				$scope.user.profile_pic = '/static/main/img/user-profile.png' //display default user avatar
 			}
-			$scope.events_org = resp.events_org;
+			//get events current user organized or is going
+			$scope.events_org = resp.events_org;  
 			$scope.events_go = resp.events_go;
+			//prepopulate profile edit form with current info
+			$scope.first_name = $scope.user.first_name; 
+			$scope.last_name = $scope.user.last_name;
+			$scope.about = $scope.user.about;
+			$scope.profile_pic = $scope.user.profile_pic;
 		})
 
-		$scope.isAuthorized = false;
-		if(AuthService.isLoggedIn()){
+		$scope.isAuthorized = false; //condition to display edit and delete profile button
+
+		if(AuthService.isLoggedIn()){ //if logged in user is the same as owner of profile
 			if( $routeParams.userId == AuthService.currentUser().id){
 				$scope.isAuthorized = true;
 			}
 		}
 
 		$scope.editProfile = function(){
-			userService.get({id: AuthService.currentUser().id}, function(resp){
-				$scope.editProfileForm.first_name = resp.first_name;
-				$scope.editProfileForm.last_name = resp.last_name;
-				$scope.editProfileForm.about = resp.about;
-				$scope.editProfileForm.profile_pic = resp.profile_pic;
-			});
-
 			userService.update({
 				id : AuthService.currentUser().id},
 				{first_name: $scope.first_name,
